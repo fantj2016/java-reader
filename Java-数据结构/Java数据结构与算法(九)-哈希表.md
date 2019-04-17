@@ -1,4 +1,4 @@
-###1. 什么是哈希表
+### 1. 什么是哈希表
 >[散列表](https://baike.baidu.com/item/%E6%95%A3%E5%88%97%E8%A1%A8)（Hash table，也叫哈希表），是根据关键码值(Key value)而直接进行访问的[数据结构](https://baike.baidu.com/item/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84).也就是说，它通过把关键码值映射到表中一个位置来访问记录，以加快查找的速度。这个映射函数叫做[散列函数](https://baike.baidu.com/item/%E6%95%A3%E5%88%97%E5%87%BD%E6%95%B0)，存放记录的[数组](https://baike.baidu.com/item/%E6%95%B0%E7%BB%84)叫做[散列表](https://baike.baidu.com/item/%E6%95%A3%E5%88%97%E8%A1%A8)。
 也是基于数组来实现。
 
