@@ -1,0 +1,99 @@
+####优先级设定
+一个合理的优先级可以在一定条件下避免一些活跃性问题，比如死锁、饥饿等
+```
+public class Task implements Runnable{
+
+    @Override
+    public void run() {
+        while (true) {
+            System.out.println(Thread.currentThread().getName() + "线程执行了...");
+        }
+    }
+}
+```
+```
+public class PriorityTest {
+    public static void main(String[] args) {
+        Thread t1 = new Thread(new Task());
+        Thread t2 = new Thread(new Task());
+
+        /**
+         * 设置优先级
+         * MAX_PRIORITY=10
+         * MIN_PRIORITY=1
+         * NORM_PRIORITY=5
+         */
+
+        t1.setPriority(Thread.NORM_PRIORITY);
+        t2.setPriority(Thread.MAX_PRIORITY);
+
+        t1.start();
+        t2.start();
+    }
+}
+```
+
+####线程安全问题解决
+当多个线程在非原子处理下操作相同的资源时，难免出现资源的混乱。
+
+我在这里举个value++的例子。
+
+######无线程安全时
+```
+public class Task{
+
+        public int value = 0;
+
+
+       // 没有处理线程安全
+        public  int getValue() {
+        return value++;
+    }
+    public static void main(String[] args) {
+
+        Task task = new Task();
+        new Thread(){
+            @Override
+            public void run() {
+                while (true) {
+                    System.out.println(Thread.currentThread().getName() + "  " + task.getValue());
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }.start();
+
+        new Thread(){
+            @Override
+            public void run() {
+                while (true) {
+                    System.out.println(Thread.currentThread().getName() + "  " + task.getValue());
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }.start();
+    }
+}
+```
+![image.png](http://upload-images.jianshu.io/upload_images/5786888-24fef6e45a09a9d9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+我们会发现2和5有重复。这是jvm底层的问题，我在后文有分析。
+
+######处理线程安全
+如果我们给线程加锁，将其变成原子性操作，就会解决该问题。
+```
+    public  synchronized int getValue() {
+        return value++;
+    }
+```
+既在修饰符后加上synchronized关键字。
+![image.png](http://upload-images.jianshu.io/upload_images/5786888-e0841cdc7b961279.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+ 
+但是又有一个问题，这样的话，其实原理上是串行处理的，那我们该如果解决这个问题呢。

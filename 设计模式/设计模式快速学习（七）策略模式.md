@@ -1,0 +1,75 @@
+>策略模式主要是用来封装一组可以互相替代的算法族，并且可以根据需要动态地去替换 Context 使用的算法。
+
+通俗的讲，策略模式就是通过面向接口编程后生出的很多策略类，然后根据上下文选择策略类进行调用。实现比较容易。
+
+##### 什么场景使用策略模式?
+>只要有一堆if else if else ...就可以用策略模式替换。
+
+如果算法实现里又有条件语句，就构成了多重条件语句，可以用策略模式，避免这样的多重条件语句。
+
+**注意事项:**如果一个系统的策略多于四个，就需要考虑使用混合模式，解决策略类膨胀的问题。
+
+##### 为什么要使用策略模式?
+>扩展性更好,面向接口编程。符合开闭原则和里氏替换原则。
+
+1. 算法可以自由切换。
+ 2. 避免使用多重条件判断。 
+3. 扩展性良好。
+
+
+##### Strategy.java
+>一个策略接口，里面声明了策略的行为。
+```
+public interface Strategy {
+    int handler(int a, int b);
+}
+```
+##### AddHandler.java
+>策略: 加法. 实现了Strategy接口，按照功能重写它的方法。
+```
+public class AddHandler implements Strategy{
+    @Override
+    public int handler(int a, int b) {
+        return a+b;
+    }
+}
+```
+##### SubtractHandler.java
+>策略：减法
+```
+public class SubtractHandler implements Strategy{
+    @Override
+    public int handler(int a, int b) {
+        return a-b;
+    }
+}
+```
+##### StrategyContext.java
+>策略上上下文，有了这部分，客户可以通过与它进行交互就可以了。使策略模式更加完整，使客户端更加简单。
+```
+public class StrategyContext {
+    private Strategy strategy;
+
+    StrategyContext(Strategy strategy){
+        this.strategy = strategy;
+    }
+
+    public int execute(int a, int b){
+        return strategy.handler(a, b);
+    }
+}
+```
+
+##### Main.java
+>测试方法。
+```
+public class Main {
+    public static void main(String[] args) {
+        StrategyContext strategyContext = new StrategyContext(new AddHandler());
+        System.out.println(strategyContext.execute(5, 5));
+
+        StrategyContext strategyContext1 = new StrategyContext(new SubtractHandler());
+        System.out.println(strategyContext1.execute(9,6 ));
+    }
+}
+```

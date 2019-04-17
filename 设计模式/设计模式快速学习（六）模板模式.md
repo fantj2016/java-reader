@@ -1,0 +1,85 @@
+>举个例子：我们写HTML的时候，先写head然后写body，这样完成了一个空HTML页面的架子，我们的这一系列行为就是一个模板。模板模式中，首先会定义一个抽象类来声明这个事件模板，子类实现并被调用。也是很简单的一个设计模式。
+
+JDBC就是用到了模板模式:
+
+##### Game.class
+>抽象类。定义模板。
+```
+public abstract class Game {
+    abstract void init();
+    abstract void start();
+    abstract void end();
+
+    /**
+     * 方法必须是final ，固定的模板不允许改变
+     */
+    public final void play(){
+        init();
+        start();
+        end();
+    }
+}
+```
+`play()`就是我定义的模板，子类继承后必须实现该具体功能。
+##### LoL.java
+```
+public class LoL extends Game{
+    @Override
+    void init() {
+        System.out.println("LOL initialize ....");
+    }
+
+    @Override
+    void start() {
+        System.out.println("LOL  starting....");
+    }
+
+    @Override
+    void end() {
+        System.out.println("LOL  ending...");
+    }
+}
+```
+##### Dota.java
+```
+public class Dota extends Game{
+    @Override
+    void init() {
+        System.out.println("Dota  initialize ....");
+    }
+
+    @Override
+    void start() {
+        System.out.println("Dota  starting....");
+    }
+
+    @Override
+    void end() {
+        System.out.println("Dota  ending...");
+    }
+}
+```
+
+##### Main.java
+```
+public class Main {
+    public static void main(String[] args) {
+        Game game= new LoL();
+        game.play();
+
+        game = new Dota();
+        game.play();
+
+    }
+}
+```
+
+控制台打印:
+```
+LOL initialize ....
+LOL  starting....
+LOL  ending...
+Dota  initialize ....
+Dota  starting....
+Dota  ending...
+```

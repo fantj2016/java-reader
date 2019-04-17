@@ -1,0 +1,263 @@
+Java从JDK1.5开始提供了java.util.concurrent.atomic包，方便程序员在多线程环境下，无锁的进行原子操作。原子变量的底层使用了处理器提供的原子指令，但是不同的CPU架构可能提供的原子指令不一样，也有可能需要某种形式的内部锁,所以该方法不能绝对保证线程不被阻塞。
+###Atomic包介绍
+官方解释：一个小型工具包，支持单变量上的无锁线程安全编程。
+![image.png](http://upload-images.jianshu.io/upload_images/5786888-98aaa28314c8db01.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+可以看到，它里面有17个java类。
+
+###原子更新基本类型类
+用于通过原子的方式更新基本类型，Atomic包提供了以下三个类：
+
+* AtomicBoolean：原子更新布尔类型。
+* AtomicInteger：原子更新整型。
+* AtomicLong：原子更新长整型。
+
+AtomicInteger的常用方法如下：
+
+*   int addAndGet(int delta) ：以原子方式将输入的数值与实例中的值（AtomicInteger里的value）相加，并返回结果
+*   boolean compareAndSet(int expect, int update) ：如果输入的数值等于预期值，则以原子方式将该值设置为输入的值。
+*   int getAndIncrement()：以原子方式将当前值加1，注意：这里返回的是自增前的值。
+*   void lazySet(int newValue)：最终会设置成newValue，使用lazySet设置值后，可能导致其他线程在之后的一小段时间内还是可以读到旧的值。关于该方法的更多信息可以参考并发网翻译的一篇文章《[AtomicLong.lazySet是如何工作的？](http://ifeve.com/how-does-atomiclong-lazyset-work/ "AtomicLong.lazySet是如何工作的？")》
+*   int getAndSet(int newValue)：以原子方式设置为newValue的值，并返回旧值。
+
+#####AtomicInteger实例
+```
+package com.thread.atomic;
+
+import java.util.concurrent.atomic.AtomicInteger;
+
+/**
+ * Created by Fant.J.
+ * 2018/2/28 17:21
+ */
+public class AtomicIntegerTest {
+    static AtomicInteger value = new AtomicInteger(0);
+
+    public static int getValue(){
+        return value.getAndIncrement();//value++;
+    }
+
+    public static void main(String[] args) {
+
+  /*      Runnable r1 = ()->{
+            for (;;){
+                System.out.println(Thread.currentThread().getName()+" :"+getValue());
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        r1.run();*/
+
+        new Thread(()->{
+            for (;;){
+                System.out.println(Thread.currentThread().getName()+" :"+getValue());
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+        new Thread(()->{
+            for (;;){
+                System.out.println(Thread.currentThread().getName()+" :"+getValue());
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+    }
+}
+
+```
+用的lambda表达式，不懂的可以看我的文章：https://www.jianshu.com/p/3a08dc78a05f
+
+
+### 餐后甜点
+
+Atomic包提供了三种基本类型的原子更新，但是Java的基本类型里还有char，float和double等。那么问题来了，如何原子的更新其他的基本类型呢？Atomic包里的类基本都是使用Unsafe实现的，让我们一起看下[Unsafe的源码](http://www.docjar.com/html/api/sun/misc/Unsafe.java.html)，发现Unsafe只提供了三种CAS方法，compareAndSwapObject，compareAndSwapInt和compareAndSwapLong，再看AtomicBoolean源码，发现其是先把Boolean转换成整型，再使用compareAndSwapInt进行CAS，所以原子更新double也可以用类似的思路来实现。
+
+###原子更新数组类
+通过原子的方式更新数组里的某个元素，Atomic包提供了以下三个类：
+
+* AtomicIntegerArray：原子更新整型数组里的元素。
+* AtomicLongArray：原子更新长整型数组里的元素。
+* AtomicReferenceArray：原子更新引用类型数组里的元素。
+* AtomicIntegerArray类主要是提供原子的方式更新数组里的整型，其常用方法如下
+
+* int addAndGet(int i, int delta)：以原子方式将输入值与数组中索引i的元素相加。
+* boolean compareAndSet(int i, int expect, int update)：如果当前值等于预期值，则以原子方式将数组位置i的元素设置成update值。
+
+示例：
+```
+public class AtomicIntegerArrayTest {
+    static int[] value = new int[]{1,2};
+    static AtomicIntegerArray ai = new AtomicIntegerArray(value);
+
+    public static void main(String[] args) {
+        ai.getAndSet(0,3);
+        System.out.println(ai.get(0));
+    }
+}
+```
+
+
+###原子更新引用类型
+原子更新基本类型的AtomicInteger，只能更新一个变量，如果要原子的更新多个变量，就需要使用这个原子更新引用类型提供的类。Atomic包提供了以下三个类：
+
+AtomicReference：原子更新引用类型。
+AtomicReferenceFieldUpdater：原子更新引用类型里的字段。
+AtomicMarkableReference：原子更新带有标记位的引用类型。可以原子的更新一个布尔类型的标记位和引用类型。构造方法是AtomicMarkableReference(V initialRef, boolean initialMark)
+
+AtomicReference的使用例子代码如下：
+```
+package com.thread.atomic;
+
+import java.util.concurrent.atomic.AtomicReference;
+
+/**
+ * Created by Fant.J.
+ * 2018/2/28 18:40
+ */
+public class AtomicReferenceTest {
+    static AtomicReference<User> ar = new AtomicReference<>();
+
+    public static void main(String[] args) {
+        User user = new User("fantj",20);
+        User updateUser = new User("dalao",20);
+
+        ar.set(user);
+        ar.compareAndSet(user,updateUser); //public final boolean compareAndSet(User expect, User update)
+        System.out.println(ar.get().getName() + " :"+ar.get().getAge());
+    }
+
+
+    static class User{
+        private String name;
+
+        private Integer age;
+
+        public User(String name, int i) {
+            this.name = name;
+            this.age=i;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public Integer getAge() {
+            return age;
+        }
+
+        public void setAge(Integer age) {
+            this.age = age;
+        }
+    }
+}
+
+```
+
+###原子更新字段类
+**如果我们只需要某个类里的某个字段，那么就需要使用原子更新字段类**，Atomic包提供了以下三个类：
+
+* AtomicIntegerFieldUpdater：原子更新整型的字段的更新器。
+* AtomicLongFieldUpdater：原子更新长整型字段的更新器。
+* AtomicStampedReference：原子更新带有版本号的引用类型。该类将整数值与引用关联起来，可用于原子的更数据和数据的版本号，可以解决使用CAS进行原子更新时，可能出现的ABA问题。
+
+原子更新字段类都是抽象类，每次使用都时候**必须使用静态方法newUpdater创建一个更新器。原子更新类的字段的必须使用public volatile修饰符。**
+
+AtomicIntegerFieldUpdater的例子代码如下：
+```
+package com.thread.atomic;
+
+import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
+
+/**
+ * 如果我们只需要某个类里的某个字段，那么就需要使用原子更新字段类
+ * 原子更新类的字段的必须使用public volatile修饰符。
+ * Created by Fant.J.
+ * 2018/2/28 18:50
+ */
+public class AtomicIntegerFieldUpdaterTest {
+
+    //假设我们需要User里的age属性，并给age进行原子更新
+    static AtomicIntegerFieldUpdater<User> aif = AtomicIntegerFieldUpdater.newUpdater(User.class,"age");
+
+    public static void main(String[] args) {
+        User user = new User("fantj",20);
+        //将User对象传给 原子更新字段类对象
+        aif.getAndIncrement(user);
+        System.out.println(aif.get(user));
+    }
+
+
+
+
+    static class User{
+        private String name;
+
+        public volatile int age;   //注意这里要加 volatile
+
+        public User(String name, int i) {
+            this.name = name;
+            this.age=i;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public Integer getAge() {
+            return age;
+        }
+
+        public void setAge(Integer age) {
+            this.age = age;
+        }
+    }
+}
+
+```
+
+
+那最后，再来解一下CAS的疑惑
+
+#####什么是CAS
+
+CAS，Compare and Swap即比较并交换。 java.util.concurrent包借助CAS实现了区别于synchronized同步锁的一种**乐观锁**。乐观锁就是每次去取数据的时候都乐观的认为数据不会被修改，所以不会上锁，但是在更新的时候会判断一下在此期间数据有没有更新。CAS有3个操作数：内存值V，旧的预期值A，要修改的新值B。当且仅当预期值A和内存值V相同时，将内存值V修改为B，否则什么都不做。CAS的关键点在于，系统**在硬件层面保证了比较并交换操作的原子性**，处理器使用基于对缓存加锁或总线加锁的方式来实现多处理器之间的原子操作。
+
+
+
+######CAS的优缺点
+
+* CAS由于是在硬件层面保证的原子性，不会锁住当前线程，它的效率是很高的。 
+
+* CAS虽然很高效的实现了原子操作，但是它依然存在三个问题。
+
+  1. ABA问题。CAS在操作值的时候检查值是否已经变化，没有变化的情况下才会进行更新。但是如果一个值原来是A，变成B，又变成A，那么CAS进行检查时会认为这个值没有变化，但是实际上却变化了。ABA问题的解决方法是使用版本号。在变量前面追加上版本号，每次变量更新的时候把版本号加一，那么A－B－A 就变成1A-2B－3A。从Java1.5开始JDK的atomic包里提供了一个类AtomicStampedReference来解决ABA问题。
+
+  2. 并发越高，失败的次数会越多，CAS如果长时间不成功，会极大的增加CPU的开销。因此CAS不适合竞争十分频繁的场景。
+
+  3. 只能保证一个共享变量的原子操作。当对多个共享变量操作时，CAS就无法保证操作的原子性，这时就可以用锁，或者把多个共享变量合并成一个共享变量来操作。比如有两个共享变量i＝2,j=a，合并一下ij=2a，然后用CAS来操作ij。从Java1.5开始JDK提供了AtomicReference类来保证引用对象的原子性，你可以把多个变量放在一个对象里来进行CAS操作。
+
+以上只介绍了常用的atomic类，其它的类如果你感兴趣可以自己研究一下。[官方文档](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/atomic/package-summary.html)
+
+本文参考文献：
+https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/atomic/package-summary.html
+http://ifeve.com/java-atomic/

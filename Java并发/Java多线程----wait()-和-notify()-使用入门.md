@@ -1,0 +1,280 @@
+>在前面讲解synchronize的文章中，有提到wait和notify，大概描述了它的使用，这里我将根据官方api详细的教你如何使用。
+
+
+### 所属对象
+wait，notify，notifyAll 是定义在Object类的实例方法，用于控制线程状态。
+
+
+###  文档分析
+
+我们找到Object类，下载它的文档，翻译每个方法的注释。
+
+总结如下：
+
+1. wait() 和 notify() 必须由对象持有者去调用，有三种方式：
+1️⃣执行该对象的synchronized实例方法
+2️⃣执行synchronized代码块
+3️⃣执行该类的synchronized静态方法
+
+2. 当想要调用wait( )进行线程等待时，必须要取得这个锁对象的控制权（对象监视器），一般是放到synchronized(obj)代码中。
+
+3. 在while循环里用wait操作性能更好（比if判断）
+
+4. 调用obj.wait( )释放了obj的锁，否则其他线程也无法获得obj的锁，也就无法在synchronized(obj){ obj.notify() } 代码段内唤醒A。
+
+5. notify( )方法只会通知等待队列中的第一个相关线程（不会通知优先级比较高的线程）
+
+6. notifyAll( )通知所有等待该竞争资源的线程（也不会按照线程的优先级来执行）
+
+7. 如果是synchronized声明的方法，wait()操作后会施放synchronized锁，相反notify()触发后会重拿起synchronized锁。
+
+8. 如果当前线程不是当前对象所持有，则会报异常IllegalMonitorStateException
+
+### 实例
+
+##### 1. 通过调用对象的wait和notify实现
+```
+/** 调用对象的 wait 和 notify 实例
+ * Created by Fant.J.
+ */
+public class Demo {
+    private boolean flag = false;
+
+    public boolean isFlag() {
+        return flag;
+    }
+
+    public void setFlag(boolean flag) {
+        this.flag = flag;
+    }
+
+    public static void main(String[] args) {
+        Demo demo = new Demo();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("修改flag线程执行");
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                demo.setFlag(true);
+                notify();
+                System.out.println("修改flag并释放锁成功");
+            }
+        }).start();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (demo.isFlag() != true){
+                    try {
+                        wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                System.out.println("flag为true时线程执行");
+
+            }
+        }).start();
+    }
+}
+
+
+
+修改flag线程执行
+Exception in thread "Thread-1" java.lang.IllegalMonitorStateException
+	at java.lang.Object.wait(Native Method)
+	at java.lang.Object.wait(Object.java:502)
+	at com.thread.waitNotify.Demo$2.run(Demo.java:41)
+	at java.lang.Thread.run(Thread.java:748)
+Exception in thread "Thread-0" java.lang.IllegalMonitorStateException
+	at java.lang.Object.notify(Native Method)
+	at com.thread.waitNotify.Demo$1.run(Demo.java:31)
+	at java.lang.Thread.run(Thread.java:748)
+```
+从运行结果可以看出，它报错IllegalMonitorStateException，我们上面有给出报该异常的原因，是因为没有没有获取到对象的监视器控制权，我们new了两个线程，一个调用了wait 一个调用了notify，jvm认为wait是一个线程下的wait，notify是另一个线程下的notify，事实上，我们想实现的是针对Demo对象的锁的wait和notify，所以，我们需要调用Demo对象的wait和notify方法。
+
+
+修改后的代码：
+```
+/** 调用对象的 wait 和 notify 实例
+ * Created by Fant.J.
+ */
+public class Demo {
+    private boolean flag = false;
+
+    public boolean isFlag() {
+        return flag;
+    }
+
+    public void setFlag(boolean flag) {
+        this.flag = flag;
+    }
+
+    public static void main(String[] args) {
+        Demo demo = new Demo();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (demo) {
+                    System.out.println("修改flag线程执行");
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    demo.setFlag(true);
+                    demo.notify();
+                    System.out.println("修改flag并释放锁成功");
+                }
+            }
+        }).start();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (demo) {
+                    while (demo.isFlag() != true) {
+                        try {
+                            demo.wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    System.out.println("flag为true时线程执行");
+                }
+            }
+        }).start();
+    }
+}
+
+
+修改flag线程执行
+修改flag并释放锁成功
+flag为true时线程执行
+```
+修改了两处，一处是加了synchronized代码块，一处是添加了wait和notify的调用对象。
+
+
+##### 2. 通过synchronized修饰方法来实现
+```
+package com.thread.waitNotify_1;
+
+/** 通过synchronized方法实现 wait notify
+ * Created by Fant.J.
+ */
+public class Demo2 {
+    private volatile boolean flag = false;
+
+    public synchronized boolean getFlag() {
+        System.out.println(Thread.currentThread().getName()+"开始执行...");
+        if (this.flag != true){
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println(Thread.currentThread().getName()+"执行结束...");
+        return flag;
+    }
+
+    public synchronized void setFlag(boolean flag) {
+        this.flag = flag;
+        notify();
+    }
+
+    public static void main(String[] args) {
+        Demo2 demo2 = new Demo2();
+        Runnable target1 = new Runnable() {
+            @Override
+            public void run() {
+                demo2.getFlag();
+            }
+        };
+
+        Runnable target2 = new Runnable() {
+            @Override
+            public void run() {
+                demo2.setFlag(true);
+            }
+        };
+
+        new Thread(target1).start();
+        new Thread(target1).start();
+        new Thread(target1).start();
+        new Thread(target1).start();
+    }
+}
+
+
+Thread-0开始执行...
+Thread-1开始执行...
+Thread-2开始执行...
+Thread-3开始执行...
+```
+为什么四个线程都执行了呢？synchronized不是锁定线程了吗？我在上面8点中也有说明，wait()操作后，会暂时释放synchronized的同步锁，等notify()触发后，又会重拾起该锁，保证线程同步。
+
+然后我们条用target2来释放一个线程：
+```
+        new Thread(target1).start();
+        new Thread(target1).start();
+        new Thread(target1).start();
+        new Thread(target1).start();
+        new Thread(target2).start();
+
+Thread-0开始执行...
+Thread-1开始执行...
+Thread-2开始执行...
+Thread-3开始执行...
+Thread-0执行结束...
+
+```
+可以看到只释放了一个线程，并且是第一个线程，如果有优先级，他也是释放第一个线程。
+
+如果把notify改成notifyAll。
+```
+Thread-0开始执行...
+Thread-2开始执行...
+Thread-1开始执行...
+Thread-3开始执行...
+Thread-3执行结束...
+Thread-1执行结束...
+Thread-2执行结束...
+Thread-0执行结束...
+```
+
+如何证明，每次notify后会拿到synchronized锁呢，我在执行notify后添加一些时间戳捕获帮助我们查看
+```
+    public synchronized void setFlag(boolean flag) {
+        this.flag = flag;
+//        notify();
+        notifyAll();
+        System.out.println("测试notify触发后会不会等2s"+System.currentTimeMillis());
+        try {
+            Thread.sleep(2000);
+            System.out.println("测试notify触发后会不会等2s"+System.currentTimeMillis());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+Thread-0开始执行...
+Thread-1开始执行...
+Thread-2开始执行...
+Thread-3开始执行...
+测试notify触发后会不会等2s1529817196847
+测试notify触发后会不会等2s1529817198847
+Thread-3执行结束...
+Thread-2执行结束...
+Thread-1执行结束...
+Thread-0执行结束...
+```
+可以看到的确是notify重拾了synchronized的同步锁，执行完该方法后才会释放锁。
+

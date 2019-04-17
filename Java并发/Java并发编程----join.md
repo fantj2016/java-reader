@@ -1,0 +1,74 @@
+>thread.join把指定的线程加入到当前线程，可以将两个交替执行的线程合并为顺序执行的线程。比如在线程A中调用了线程B的Join()方法，直到线程B执行完毕后，才会继续执行线程A。
+
+##### 例子：
+>在线程A中调用了线程B的Join()方法，直到线程B执行完毕后，才会继续执行线程A。
+```
+public class Demo {
+    public void a(Thread join){
+        System.out.println("方法a执行了");
+        join.start();
+        try {
+            join.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("a方法执行完毕");
+    }
+    public void b(){
+        System.out.println("加塞线程执行。。");
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("加塞线程执行完毕。。");
+    }
+
+    public static void main(String[] args) {
+        Demo demo = new Demo();
+        Thread t1 = new Thread(() -> demo.b());
+        new Thread(() -> demo.a(t1)).start();
+    }
+}
+```
+```
+方法a执行了
+加塞线程执行。。
+加塞线程执行完毕。。
+a方法执行完毕
+```
+
+### 源码分析
+```
+    public final synchronized void join(long millis)
+    throws InterruptedException {
+        long base = System.currentTimeMillis();
+        long now = 0;
+
+        if (millis < 0) {
+            throw new IllegalArgumentException("timeout value is negative");
+        }
+
+        if (millis == 0) {
+            while (isAlive()) {
+                //wait操作挂起 调用join方法的线程锁
+                wait(0);
+            }
+        } else {
+            while (isAlive()) {
+                long delay = millis - now;
+                if (delay <= 0) {
+                    break;
+                }
+                wait(delay);
+                now = System.currentTimeMillis() - base;
+            }
+        }
+    }
+```
+其中参数`long millis`是来规范join执行的时间，默认为0.
+`isAlive():`  `A thread is alive if it has been started and has not yet died`
+如果当前线程活着，就将其挂起（wait）。
+
+##### 那什么时候才会施放线程锁呢？
+每当线程执行完毕后，默认会调用notifyAll方法。

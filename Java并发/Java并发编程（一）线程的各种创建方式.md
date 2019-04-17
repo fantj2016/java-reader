@@ -1,0 +1,215 @@
+####方法一：继承Thread类，作为线程对象存在（继承Thread对象）
+```
+public class CreatThreadDemo1 extends Thread{
+    /**
+     * 构造方法： 继承父类方法的Thread(String name)；方法
+     * @param name
+     */
+    public CreatThreadDemo1(String name){
+        super(name);
+    }
+
+    @Override
+    public void run() {
+        while (!interrupted()){
+            System.out.println(getName()+"线程执行了...");
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        CreatThreadDemo1 d1 = new CreatThreadDemo1("first");
+        CreatThreadDemo1 d2 = new CreatThreadDemo1("second");
+
+        d1.start();
+        d2.start();
+
+        d1.interrupt();  //中断第一个线程
+    }
+}
+```
+常规方法，不多做介绍了，interrupted方法，是来判断该线程是否被中断。（终止线程不允许用stop方法，该方法不会施放占用的资源。所以我们在设计程序的时候，要按照中断线程的思维去设计，就像上面的代码一样）。
+######让线程等待的方法
+* Thread.sleep(200);  //线程休息2ms
+* Object.wait()；  //让线程进入等待，直到调用Object的notify或者notifyAll时，线程停止休眠
+
+####方法二：实现runnable接口，作为线程任务存在
+```
+public class CreatThreadDemo2 implements Runnable {
+    @Override
+    public void run() {
+        while (true){
+            System.out.println("线程执行了...");
+        }
+    }
+
+    public static void main(String[] args) {
+        //将线程任务传给线程对象
+        Thread thread = new Thread(new CreatThreadDemo2());
+        //启动线程
+        thread.start();
+    }
+}
+```
+Runnable 只是来修饰线程所执行的任务，它不是一个线程对象。想要启动Runnable对象，必须将它放到一个线程对象里。
+
+####方法三：匿名内部类创建线程对象
+```
+public class CreatThreadDemo3 extends Thread{
+    public static void main(String[] args) {
+        //创建无参线程对象
+        new Thread(){
+            @Override
+            public void run() {
+                System.out.println("线程执行了...");
+            }
+        }.start();
+       //创建带线程任务的线程对象
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("线程执行了...");
+            }
+        }).start();
+        //创建带线程任务并且重写run方法的线程对象
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("runnable run 线程执行了...");
+            }
+        }){
+            @Override
+            public void run() {
+                System.out.println("override run 线程执行了...");
+            }
+        }.start();
+    }
+
+}
+
+```
+创建带线程任务并且重写run方法的线程对象中，为什么只运行了Thread的run方法。我们看看Thread类的源码，![image.png](http://upload-images.jianshu.io/upload_images/5786888-8fc80d17feb58198.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+，我们可以看到Thread实现了Runnable接口，而Runnable接口里有一个run方法。
+所以，我们最终调用的重写的方法应该是Thread类的run方法。而不是Runnable接口的run方法。
+
+####方法四：创建带返回值的线程
+```
+public class CreatThreadDemo4 implements Callable {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+        CreatThreadDemo4 demo4 = new CreatThreadDemo4();
+
+        FutureTask<Integer> task = new FutureTask<Integer>(demo4); //FutureTask最终实现的是runnable接口
+
+        Thread thread = new Thread(task);
+
+        thread.start();
+
+        System.out.println("我可以在这里做点别的业务逻辑...因为FutureTask是提前完成任务");
+        //拿出线程执行的返回值
+        Integer result = task.get();
+        System.out.println("线程中运算的结果为:"+result);
+    }
+
+    //重写Callable接口的call方法
+    @Override
+    public Object call() throws Exception {
+        int result = 1;
+        System.out.println("业务逻辑计算中...");
+        Thread.sleep(3000);
+        return result;
+    }
+}
+
+```
+Callable接口介绍：
+```
+public interface Callable<V> {
+    /**
+     * Computes a result, or throws an exception if unable to do so.
+     *
+     * @return computed result
+     * @throws Exception if unable to compute a result
+     */
+    V call() throws Exception;
+}
+```
+返回指定泛型的call方法。然后调用FutureTask对象的get方法得道call方法的返回值。
+
+####方法五：定时器Timer
+```
+public class CreatThreadDemo5 {
+
+    public static void main(String[] args) {
+        Timer timer = new Timer();
+
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                System.out.println("定时器线程执行了...");
+            }
+        },0,1000);   //延迟0，周期1s
+
+    }
+}
+```
+####方法六：线程池创建线程
+```
+public class CreatThreadDemo6 {
+    public static void main(String[] args) {
+        //创建一个具有10个线程的线程池
+        ExecutorService threadPool = Executors.newFixedThreadPool(10);
+        long threadpoolUseTime = System.currentTimeMillis();
+        for (int i = 0;i<10;i++){
+            threadPool.execute(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println(Thread.currentThread().getName()+"线程执行了...");
+                }
+            });
+        }
+        long threadpoolUseTime1 = System.currentTimeMillis();
+        System.out.println("多线程用时"+(threadpoolUseTime1-threadpoolUseTime));
+        //销毁线程池
+        threadPool.shutdown();
+        threadpoolUseTime = System.currentTimeMillis();
+    }
+
+}
+
+```
+####方法七：利用java8新特性  stream 实现并发
+lambda表达式不懂的，可以看看我的java8新特性文章：
+java8-lambda：https://www.jianshu.com/p/3a08dc78a05f
+java8-stream：https://www.jianshu.com/p/ea16d6712a00
+```
+public class CreatThreadDemo7 {
+    public static void main(String[] args) {
+        List<Integer> values = Arrays.asList(10,20,30,40);
+        //parallel 平行的，并行的
+        int result = values.parallelStream().mapToInt(p -> p*2).sum();
+        System.out.println(result);
+        //怎么证明它是并发处理呢
+        values.parallelStream().forEach(p-> System.out.println(p));
+    }
+}
+
+```
+```
+200
+40
+10
+20
+30
+```
+怎么证明它是并发处理呢,他们并不是按照顺序输出的 。
+
+
+
+
+
+
+

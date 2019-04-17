@@ -1,0 +1,285 @@
+### 概述
+
+>虚拟机把描述类的数据从CLass文件加载到内存，并对数据进行校验，解析和初始化，最终形成可以被虚拟机直接使用的Java类型，这就是虚拟机的类加载机制（懒加载）。
+
+
+### 类加载过程
+
+>加载--连接--初始化--使用--卸载
+![](https://upload-images.jianshu.io/upload_images/5786888-57848cdb9092f4b4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+
+
+### 1. 加载(Loading)
+
+* 通过一个类的全限定名来获取定义此类的二进制流
+* 将这个字节流锁代表的静态存储结构转化为方法区的运行时数据结构
+* 在内存中生成一个代表这个类的Class对象，作为方法区这个类的各种数据的访问入口。
+
+#### 1.1 加载源
+
+（1）从本地系统直接加载
+（2）通过网络下载.class文件
+（3）从zip，jar等归档文件中加载.class文件
+（4）从专有数据库中提取.class文件
+（5）将Java源文件动态编译为.class文件（服务器）
+......
+
+
+### 2.  连接
+#### 2.1 验证
+>验证是连接的第一步，这一阶段的目的是为了确保Class文件的字节流中包含的信息符合当前虚拟机的要求，并且不会危害虚拟机自身的安全
+##### 2.1.1 文件格式验证
+（1）是否以魔数0xCAFEBABE开头。
+（2）主、次版本号是否在当前虚拟机处理范围之内。
+（3）常量池的常量中是否有不被支持的常量类型（检查常量tag标志）。
+（4）指向常量的各种索引值中是否有指向不存在的常量或不符合类型的常量。
+（5）CONSTANT_Utf8_info型的常量中是否有不符合UTF8编码的数据。
+（6）Class文件中各个部分及文件本身是否有被删除的或附加的其他信息。
+  ......
+##### 2.1.2 元数据验证
+（1）这个类是否有父类（除了java.lang.Object之外，所有类都应当有父类）。
+（2）这个类是否继承了不允许被继承的类（被final修饰的类）。
+（3）如果这个类不是抽象类，是否实现了其父类或接口之中所要求实现的所有方法。
+（4）类中的字段、方法是否与父类产生矛盾（例如覆盖了父类的final字段，或者出现不符合规则的方法重载，例如方法参数都一致，但返回值类型却不同等等）。
+ ......
+##### 2.1.3 字节码验证
+主要目的是通过数据流和控制流分析，确定程序语义是合法的、符合逻辑的。这个阶段将对类的方法体进行校验分析，保证被校验类的方法在运行时不会产生危害虚拟机安全的事件，例如：
+（1）保证任意时刻操作数栈的数据类型与指令代码序列都能配合工作，例如不会出现类似这样的情况：在操作数栈放置了一个int类型的数据，使用时却按long类型来加载入本地变量表中。
+（2）保证跳转指令不会跳转到方法体以外的字节码指令上。
+（3）保证方法体中的类型转换是有效的，例如可以把一个子类对象赋值给父类数据类型，但是把父类对象赋值给子类数据类型，甚至把对象赋值给与它毫无继承关系、完全不相干的一个数据类型，则是危险不合法的。
+......
+##### 2.1.4 符号引用验证
+符号引用验证可以看作是类对自身以外（常量池中的各种符号引用）的信息进行匹配性校验，通常需要校验以下内容：
+（1）符号引用中通过字符串描述的全限定名是否能够找到对应的类。
+（2）在指定类中是否存在符合方法的字段描述符以及简单名称所描述的方法和字段。
+（3）符号引用中的类、字段、方法的访问性（private、protected、public、default）是否可被当前类访问。
+ ......
+#### 2.2  准备
+>为类变量分配内存并设置变量的初始值，这些变量使用的内存都将在方法区中进行分配。
+ 
+###### 整体类型是：
+
+*   `byte`，其值为8位有符号二进制补码整数，其默认值为零
+
+*   `short`，其值为16位有符号二进制补码整数，其默认值为零
+
+*   `int`，其值为32位有符号二进制补码整数，其默认值为零
+
+*   `long`，其值为64位带符号的二进制补码整数，其默认值为零
+
+*   `char`，其值为16位无符号整数，表示基本多语言平面中的Unicode代码点，使用UTF-16编码，其默认值为空代码点（`'\u0000'`）
+
+###### 浮点类型是：
+
+*   `float`，其值是浮点值集的元素，或者，如果支持，则为float-extended-exponent值集，其默认值为正零
+
+*   `double`，其值是double值集的元素，或者，如果支持，则为double-extended-exponent值集，其默认值为正零
+
+所述的值`boolean` 类型编码的真值`true`和`false`，并且缺省值是`false`。
+
+###### 参考类型和值
+有三种`reference` 类型：类类型，数组类型和接口类型。它们的值分别是对动态创建的类实例，数组或类实例或实现接口的数组的引用。
+
+数组类型由具有单个维度的 *组件类型*（其长度不是由类型给出）组成。数组类型的组件类型本身可以是数组类型。如果从任何数组类型开始，考虑其组件类型，然后（如果它也是数组类型）该类型的组件类型，依此类推，最终必须达到不是数组类型的组件类型; 这称为数组类型的*元素*类型。数组类型的元素类型必须是基本类型，类类型或接口类型。
+
+甲`reference`值也可以是专用空引用的，没有对象的引用，这将在这里通过来表示`null`。该`null`引用最初没有运行时类型，但可以转换为任何类型。`reference`类型的默认值是`null`。
+
+该规范不要求具体的值编码`null`。
+
+
+#### 2.3  解析
+>解析阶段是虚拟机将常量池中的符号引用替换为直接引用的过程。
+符号引用（Symbolic References）：符号引用以一组符号来描述所引用的目标，符号可以是任何形式的字面量，只要使用时能无歧义地定位到目标即可。
+直接引用（Direct References）：直接引用可以是直接指向目标的指针、相对偏移量或是一个能间接定位到目标的句柄。如果有了直接引用，那么引用的目标一定是已经存在于内存中。
+
+解析对象包括：
+###### 2.3.1 类或者接口的解析
+假设当前代码所处的类为D，如果要把一个从未解析过的符号引用N解析为一个类或接口C的引用，那虚拟机完成整个解析过程需要以下3个步骤：
+（1）如果C不是一个数组类型，那虚拟机将会把代表N的全限定名传递给D的类加载器去加载这个类C。
+（2）如果C是一个数组类型，并且数组的元素类型为对象，那将会按照第1点的规则加载数组元素类型。
+（3）如果上面的步骤没有出现任何异常，那么C在虚拟机中实际上已经成为了一个有效的类或接口了，但在解析完成之前还要进行符号引用验证，确认D是否具有对C的访问权限。如果发现不具备访问权限，则抛出java.lang.IllegalAccessError异常。
+###### 2.3.2 字段解析
+首先解析字段表内class_index项中索引的CONSTANT_Class_info符号引用，也就是字段所属的类或接口的符号引用，如果解析完成，将这个字段所属的类或接口用C表示，虚拟机规范要求按照如下步骤对C进行后续字段的搜索。
+（1）如果C 本身就包含了简单名称和字段描述符都与目标相匹配的字段，则返回这个字段的直接引用，查找结束。
+（2）否则，如果C中实现了接口，将会按照继承关系从下往上递归搜索各个接口和它的父接口如果接口中包含了简单名称和字段描述符都与目标相匹配的字段，则返回这个字段的直接引用，查找结束。
+（3）否则，如果C 不是java.lang.Object的话，将会按照继承关系从下往上递归搜索其父类，如果在父类中包含了简单名称和字段描述符都与目标相匹配的字段，则返回这个字段的直接引用，查找结束。
+（4）否则，查找失败，抛出java.lang.NoSuchFieldError异常。
+###### 2.3.3 类方法解析
+首先解析类方法表内class_index项中索引的CONSTANT_Class_info符号引用，也就是方法所属的类或接口的符号引用，如果解析完成，将这个类方法所属的类或接口用C表示，虚拟机规范要求按照如下步骤对C进行后续类方法的搜索。
+（1）类方法和接口方法符号引用的常量类型定义是分开的，如果在类方法表中发现class_index中索引的C 是个接口，那就直接抛出java.lang.IncompatibleClassChangeError异常。
+（2）如果通过了第一步，在类C 中查找是否有简单名称和描述符都与目标相匹配的方法，如果有则返回这个方法的直接引用，查找结束。
+（3）否则，在类C的父类中递归查找是否有简单名称和描述符都与目标相匹配的方法，如果有则返回这个方法的直接引用，查找结束。
+（4）否则，在类C实现的接口列表以及他们的父接口中递归查找是否有简单名称和描述符都与目标相匹配的方法，如果存在相匹配的方法，说明类C是一个抽象类这时查找结束，抛出java.lang.AbstractMethodError异常。
+（5）否则，宣告方法查找失败，抛出java.lang.NoSuchMethodError。
+###### 2.3.4 接口方法解析
+首先解析接口方法表内class_index项中索引的CONSTANT_Class_info符号引用，也就是方法所属的类或接口的符号引用，如果解析完成，将这个接口方法所属的接口用C表示，虚拟机规范要求按照如下步骤对C进行后续接口方法的搜索。
+（1）与类解析方法不同，如果在接口方法表中发现class_index中的索引C是个类而不是个接口，那就直接抛出java.lang.IncompatibleClassChangeError异常。
+（2）否则，在接口C中查找是否有简单名称和描述符都与目标相匹配的方法，如果有则返回这个方法的直接引用，查找结束。
+（3）否则，在接口C的父接口中递归查找，直到java.lang.Object类（查找范围包括Object类）为止，看是否有简单名称和描述符都与目标相匹配的方法，如果有则返回这个方法的直接引用，查找结束。
+（4）否则，宣告方法查找失败，抛出java.lang.NoSuchMethodError。
+
+
+### 3. 初始化
+* 遇到`new`、`getstatic`、`putstatic`或`invokestatic`这四个字节码指令时，如果类没有进行过初始化，则需要先触发其初始化。生成这四条命令的最常见的静态字段（被`final`修饰、已在编译器把结果放入常量池的静态字段除外）的时候，以及调用一个类的静态方法的时候
+* 使用反射对类进行调用，如果该类没有进行初始化 ，则需要先触发其初始化
+* 当初始化一个类的时候，如果发现其父类还没有进行过初始化，则需要先触发其父类的初始化。
+* 当虚拟机启动时，用户需要制定一个需要执行的主类，即：包含main方法的类。虚拟机会先初始化这个类。
+
+##### 不能被初始化的例子
+* 通过子类引用父类的静态字段，子类不会被初始化
+* 通过数组定义来引用类
+* 调用类的常量（常量在编译阶段就存入调用类的常量池中了）
+
+##### 示例1：
+```
+public class Fantj {
+    public static int high = 180;
+    static {
+        System.out.println("静态初始化类Fantj ");
+        high = 185;
+    }
+    public Fantj(){
+        System.out.println("创建Fantj 类的对象");
+    }
+}
+```
+```
+public class Main {
+    public static void main(String[] args) {
+        Fantj fantj = new Fantj();
+        System.out.println(fantj.high);
+    }
+}
+```
+控制台打印：
+```
+静态初始化类Fantj 
+创建Fantj 类的对象
+185
+```
+1. jvm加载Main类，首先在方法区生成Main类对应的`静态变量`、`静态方法`、`常量池`、`代码`等，同时在堆里生成Class对象（反射对象），通过该对象可以访问方法区信息，类`Fantj `也是如此。
+2. `main`方法执行，一个方法对应一个栈帧，所以`Fantj `压栈，一开始`fantj` 是空，`Fantj `压栈的同时堆中生成`Fantj `对象，然后把对象地址交付给`fantj `，此时`fantj` 就拥有了`Fantj `对象地址。
+3. `fantj.high` 来调用方法区的数据。
+
+好了，试试静态方法。给Fantj类加个方法：
+```
+    public static void boss(){
+        System.out.println("boss静态方法初始化");
+    }
+```
+```
+public class Main {
+    public static void main(String[] args) {
+//        Fantj fantj = new Fantj();
+//        System.out.println(fantj.high);
+        Fantj.boss();
+    }
+}
+```
+```
+静态初始化类Fantj 
+boss静态方法初始化
+```
+说明了调用静态方法没有对类进行实例化，所以静态类加载会被初始化。
+
+### 4. 类加载器
+>JVM的类加载是通过ClassLoader及其子类来完成的，虚拟机设计团队把加载动作放到JVM外部实现，以便让应用程序决定如何获取所需的类，JVM提供了3种类加载器：
+
+##### 4.1 启动类加载器(Bootstrap ClassLoader)：
+负责加载 `JAVA_HOME\lib` 目录中的，或通过-Xbootclasspath参数指定路径中的，且被虚拟机认可（按文件名识别，如rt.jar）的类。
+##### 4.2 扩展类加载器(Extension ClassLoader)：
+
+负责加载 `JAVA_HOME\lib\ext `目录中的，或通过java.ext.dirs系统变量指定路径中的类库。
+##### 4.3 应用程序类加载器(Application ClassLoader)：
+
+负责加载用户路径（classpath）上的类库。
+
+##### 4.4 自定义类加载器
+* 高度灵活
+* 实现热部署
+* 代码加密
+
+JVM通过双亲委派模型进行类的加载，当然我们也可以通过继承java.lang.ClassLoader实现自定义的类加载器。
+
+###### 一个小Demo
+```
+/**
+ * 只加载当前包下的类，不是当前包下的交给上面的类加载器
+ * Created by Fant.J.
+ */
+public class MyClassLoader {
+        ClassLoader classLoader = new ClassLoader() {
+
+            @Override
+            public Class<?> loadClass(String name) throws ClassNotFoundException {
+                //拿出类的简单名称
+                String filename = name.substring(name.lastIndexOf(".") + 1) + ".class";
+
+                InputStream ins = getClass().getResourceAsStream(filename);
+
+                if (ins == null){
+                    return super.loadClass(name);
+                }
+                try {
+                    byte [] buff = new byte[ins.available()];
+                    ins.read(buff);
+                    // 将字节码转换成类对象
+                    return defineClass(name,buff,0,buff.length);
+                } catch (Exception e) {
+                    //
+                    throw new ClassNotFoundException();
+                }
+            }
+        };
+}
+```
+在自定义的加载器中，将本包以外的类的加载工作都交给父类加载器：`return super.loadClass(name);`
+```
+public abstract class Test {
+    public static void main(String[] args) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+        MyClassLoader myClassLoader = new MyClassLoader();
+        Object o = myClassLoader.classLoader.loadClass("com.jvm.classload.Son").newInstance();
+        System.out.println("Son类对象："+o.getClass());
+        System.out.println("Son父类对象："+o.getClass().getSuperclass());
+
+        Object c = myClassLoader.classLoader.loadClass("com.jvm.classload.MyClassLoader").newInstance();
+        System.out.println("c对象的类加载器："+c.getClass().getClassLoader());
+        System.out.println("myClassLoader对象的类加载器："+myClassLoader.getClass().getClassLoader());
+    }
+}
+```
+控制台输出：
+```
+Son类对象：class com.jvm.classload.Son
+Son父类对象：class com.jvm.classload.Parent
+c对象的类加载器：com.jvm.classload.MyClassLoader$1@4dc63996
+myClassLoader对象的类加载器：sun.misc.Launcher$AppClassLoader@18b4aac2
+```
+我们可以发现，同样是MyClassLoader 这个对象，但是他们的类加载器不同，那他们就是不同的对象。
+
+**拓展**：
+1. 通过一个类的全限定名来获取描述此类的二进制字节流
+2. 只有被同一个类加载器加载的类才可能会相等。相同的字节码被不同的类加载器加载的类不相等。
+3. 类的加载，会将其所有的父类都加载一遍，直到java.lang.Object。（因为Object是所有类的父类）
+
+
+
+### 5. 双亲委派模型
+>通俗的讲，就是某个特定的类加载器在接到加载类的请求时，首先将加载任务委托给父类加载器，依次递归，如果父类加载器可以完成类加载任务，就成功返回；只有父类加载器无法完成此加载任务时，才自己去加载。
+
+![](https://upload-images.jianshu.io/upload_images/5786888-7f117d4715a14dca.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+各个类加载器之间的层次关系被称为类加载器的双亲委派模型。该模型要求除了顶层的启动类加载器外，其余的类加载器都应该有自己的父类加载器，而这种父子关系一般通过组合（Composition）关系来实现，而不是通过继承（Inheritance）。
+
+双亲委派模型是Java设计者推荐给开发者的类加载器的实现方式，并不是强制规定的。大多数的类加载器都遵循这个模型。
+
+
+**其实，该模型就是防止内存中出现多份同样的字节码 。**
+
+
+参考文档：
+1. https://docs.oracle.com/javase/specs/jvms/se10/html/index.html
+2. http://www.importnew.com/25295.html
+3. https://blog.csdn.net/u011080472/article/details/51332866
+

@@ -1,0 +1,76 @@
+>用于创建重复的对象，同时又能保证性能。通俗的讲，原型模式就是克隆对象，直接copy字节码，不走构造方法，性能非常高。ORM中经常用到。
+
+
+#### 注意
+只支持9种数据类型的深拷贝： 8大基本类型`（int long float double boolean char short  byte ）`+`String`
+其他(List等)数据类型默认都是浅拷贝，但是我们也能通过他们自身的clone方法来深拷贝。
+```
+        List list = new ArrayList();
+        List cloneList = (List) ((ArrayList) list).clone();
+```
+
+##### Prototype.java
+>实现Cloneable接口，并且重写clone()方法。
+```
+public class Prototype implements Cloneable{
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+}
+```
+**注**:如果不实现该接口而直接调用clone()方法会抛出CloneNotSupportedException异常
+
+
+##### PeoplePrototype.java
+>人原型，用来做被拷贝的对象。
+```
+public class PeoplePrototype extends Prototype{
+    private int age;
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+}
+```
+
+##### Main.java
+```
+public class Main {
+    public static void main(String[] args) {
+        PeoplePrototype prototype = new PeoplePrototype();
+        prototype.setAge(20);
+        prototype.setName("FantJ");
+        try {
+            PeoplePrototype clone = (PeoplePrototype)prototype.clone();
+            System.out.println(clone.getAge());
+            System.out.println(clone == prototype);
+            System.out.println(clone+"    "+prototype);
+            System.out.println(clone.getClass()  +"     "+ prototype.getClass());
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+控制台打印:
+```
+20
+false
+com.fantj.prototype.ConcretePrototype@6d6f6e28    com.fantj.prototype.ConcretePrototype@135fbaa4
+class com.fantj.prototype.ConcretePrototype     class com.fantj.prototype.ConcretePrototype
+```

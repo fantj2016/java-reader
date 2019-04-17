@@ -1,0 +1,175 @@
+>ThreadLocal一般称为线程本地变量，它是一种特殊的线程绑定机制，将变量与线程绑定在一起，为每一个线程维护一个独立的变量副本。通过ThreadLocal可以将对象的可见范围限制在同一个线程内。
+
+### Demo
+```
+public class Demo {
+    private ThreadLocal<Integer> threadLocal = ThreadLocal.withInitial(() -> 0);
+
+    public int getNext(){
+        Integer integer = threadLocal.get();
+        integer++;
+        threadLocal.set(integer);
+        return integer;
+    }
+
+    public static void main(String[] args) {
+        Demo demo = new Demo();
+        new Thread(() -> {
+            while (true){
+                System.out.println(Thread.currentThread().getName()+"   :"+demo.getNext());
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+        new Thread(() -> {
+            while (true){
+                System.out.println(Thread.currentThread().getName()+"   :"+demo.getNext());
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+}
+```
+```
+Thread-0   :1
+Thread-1   :1
+Thread-1   :2
+Thread-1   :3
+Thread-1   :4
+Thread-1   :5
+Thread-1   :6
+Thread-1   :7
+Thread-1   :8
+Thread-1   :9
+Thread-1   :10
+Thread-0   :2
+......
+```
+我们可以看到，线程0和线程1是相互不干扰的
+
+
+
+### 源码分析
+>`demo`中，我们用到`ThreadLocal`的`get()`方法和`set()`方法，我们看看它底层是怎么实现的，当然，还有个`remove()`方法。这三个是最核心的API。
+
+
+#### 1. get()
+```
+    public T get() {
+        Thread t = Thread.currentThread();
+        ThreadLocalMap map = getMap(t);
+        //如果map不为空，则拿出他的Entry，进而拿出entry的value
+        if (map != null) {
+            ThreadLocalMap.Entry e = map.getEntry(this);
+            if (e != null) {
+                @SuppressWarnings("unchecked")
+                T result = (T)e.value;
+                return result;
+            }
+        }
+        return setInitialValue();
+    }
+```
+`return setInitialValue();`中的`setInitialValue()`:
+##### 1.1 setInitialValue() 
+```
+    private T setInitialValue() {
+        //调用下面的initialValue方法
+        T value = initialValue();
+        //获取当前线程
+        Thread t = Thread.currentThread();
+        //通过当前线程来获取map
+        ThreadLocalMap map = getMap(t);
+        //如果map不为空，则set，如果为空，new一个ThreadLocalMap（createMap方法）
+        if (map != null)
+            map.set(this, value);
+        else
+            createMap(t, value);
+        return value;
+    }
+    protected T initialValue() {
+        return null;
+    }
+```
+##### 1.2 createMap
+```
+    void createMap(Thread t, T firstValue) {
+        t.threadLocals = new ThreadLocalMap(this, firstValue);
+    }
+```
+##### 1.3 getMap
+```
+    ThreadLocalMap getMap(Thread t) {
+        return t.threadLocals;
+    }
+    ThreadLocal.ThreadLocalMap threadLocals = null;
+```
+##### 1.4 Entry 
+```
+       static class Entry extends WeakReference<ThreadLocal<?>> {
+            /** The value associated with this ThreadLocal. */
+            Object value;
+
+            Entry(ThreadLocal<?> k, Object v) {
+                super(k);
+                value = v;
+            }
+        }
+```
+##### 1.5 ThreadLocal和ThreadLocalMap对应关系
+![ThreadLocal和ThreadLocalMap对应关系](https://upload-images.jianshu.io/upload_images/5786888-ea551311d7b3cf2f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+#### 2. set(T value)
+```
+    public void set(T value) {
+        Thread t = Thread.currentThread();
+        ThreadLocalMap map = getMap(t);
+        if (map != null)
+            map.set(this, value);
+        else
+            createMap(t, value);
+    }
+```
+`set()`方法和上文的`setInitialValue()`方法很相似。不过一个是面向业务编程，一个是对象初始化(无参)。
+
+###### 2.1 remove
+```
+     public void remove() {
+         ThreadLocalMap m = getMap(Thread.currentThread());
+         if (m != null)
+             m.remove(this);
+     } 
+```
+`m.remove(this)   的   remove() 方法`
+###### 2.2 ThreadLocalMap.remove
+```
+/**
+ * Remove the entry for key.
+ */
+private void remove(ThreadLocal<?> key) {
+    //获取所有的Entry
+    Entry[] tab = table;
+    int len = tab.length;
+    int i = key.threadLocalHashCode & (len-1);
+    //遍历查找 key，如果存在，clear对应的Entry
+    for (Entry e = tab[i];
+         e != null;
+         e = tab[i = nextIndex(i, len)]) {
+        if (e.get() == key) {
+            e.clear();
+            expungeStaleEntry(i);
+            return;
+        }
+    }
+}
+```
+
+#### 3. 总结
+我们可以看到，`ThreadLocal`和`Thread`对象进行绑定，然后将`Thread`做`key`（实际上key并不是ThreadLocal本身，而是它的一个弱引用），`Object`做`value`存放在`map`中。也就是说每个线程有一个自己的ThreadLocalMap。调用`get`方法时，获取到当前对象然后获取`value`进而进行操作，在往某个`ThreadLocal`里塞值的时候，都会往自己的`ThreadLocalMap`里存，读也是以某个`ThreadLocal`作为引用，在自己的`map`里找对应的`key`，从而实现了线程隔离。

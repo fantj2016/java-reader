@@ -1,0 +1,128 @@
+>单例模式（Singleton Pattern）是 Java 中最简单的设计模式之一。这种类型的设计模式属于创建型模式，它提供了一种创建对象的最佳方式。
+这种模式涉及到一个单一的类，该类负责创建自己的对象，同时确保只有单个对象被创建。这个类提供了一种访问其唯一的对象的方式，可以直接访问，不需要实例化该类的对象。
+
+##### 优点
+1、在内存里只有一个实例，减少了内存的开销，尤其是频繁的创建和销毁实例（比如管理学院首页页面缓存）。
+ 2、避免对资源的多重占用（比如写文件操作）。
+
+##### 缺点
+没有接口，不能继承，与单一职责原则冲突，一个类应该只关心内部逻辑，而不关心外面怎么样来实例化。
+
+
+### 实现方式一：懒汉式（线程不安全）
+懒汉式：就是用的时候再进行实例化对象。
+```
+public class Singleton {  
+    private static Singleton instance;  
+    private Singleton (){}  
+  
+    public static Singleton getInstance() {  
+    if (instance == null) {  
+        instance = new Singleton();  
+    }  
+    return instance;  
+    }  
+}
+```
+这种实现方式不支持多线程，因为没有同步锁，多线程下不能正常工作。
+
+
+### 实现方式二：懒汉式（线程安全）
+```
+public class Singleton {
+    private static Singleton instance;
+
+    public static synchronized Singleton getInstance(){
+        if (instance == null){
+            instance = new Singleton();
+        }
+        return instance;
+    }
+}
+```
+可以在多线程环境下使用，但是效率太低。
+
+**优点：**一个对象初始化一次，节省内存。
+**缺点：**必须用synchronized来维持单例，没效率。
+
+### 实现方式三：饿汉式（线程安全）
+```
+public class Singleton {
+    private static Singleton instance = new Singleton();
+
+    public static Singleton getInstance(){
+        return instance;
+    }
+}
+```
+因为它作为静态资源，所以在类装载时就被实例化
+
+**优点：**没有加锁，执行效率会提高。
+**缺点：**类加载时就初始化，浪费内存。
+
+
+### 实现方式四：双检锁/双重校验锁DCL（线程安全）
+
+```
+public class Singleton {
+    private static Singleton instance;
+
+    public static Singleton getInstance(){
+        if (instance == null){
+            synchronized (Singleton.class){
+                if (instance == null){
+                    instance = new Singleton();
+                }
+            }
+        }
+        return instance;
+    }
+}
+```
+采用双锁机制，安全且在多线程情况下能保持高性能。详细了解请点击：[Java并发编程 -- 单例模式线程安全问题](https://www.jianshu.com/p/3707bc0fc6f0)
+
+
+### 实现方式五：登记式/静态内部类（线程安全）
+```
+public class Singleton {
+    private static Singleton instance;
+
+    private static class SingletonHandler{
+        private static final Singleton INSTANCE = new Singleton();
+    }
+
+    public static Singleton getInstance(){
+        return SingletonHandler.INSTANCE;
+    }
+}
+```
+这种方式可以说是恶汉式的变通版，SingletonHandler没有被主动使用的情况下是不会实例化Singleton对象的，所以这样做，既能达到lazy式的加载，又能保证线程安全。
+
+### 实现方式六：枚举类（线程安全）
+```
+public enum  Singleton {
+    INSTANCE;
+    public void myMethod() {
+        System.out.println("enum instance test");
+    }
+}
+```
+它不仅能避免多线程同步问题，而且还自动支持序列化机制，防止反序列化重新创建新的对象，绝对防止多次实例化。
+
+
+测试：
+```
+public class Main {
+    public static void main(String[] args) {
+        Singleton singleton = Singleton.INSTANCE;
+        singleton.myMethod();
+    }
+}
+```
+```
+enum instance test
+```
+
+
+### 总结
+不建议使用第 1 种和第 2 种懒汉方式，建议使用第 3 种饿汉方式。只有在要明确实现 lazy loading 效果时，才会使用第 5 种登记方式。如果涉及到反序列化创建对象时，可以尝试使用第 6 种枚举方式。
