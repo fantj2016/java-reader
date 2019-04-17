@@ -1,15 +1,18 @@
+
 # java-reader
 >这是我学习java的一些历程，分享给大家，有一些写的不好的完善后再上线。
 
 **不断完善、不断更新**
 
-#### 算法刷题
+
+
+### 1. 算法
 >暂时还不完整，大家一起努力。
 * [Leetcode](https://github.com/fantj2016/data-structures-with-algorithm/tree/master/main/com/algorithm/leetcode)
 * [剑指Offer](https://github.com/fantj2016/data-structures-with-algorithm/tree/master/main/com/algorithm/offer)
 * [各种排序](https://github.com/fantj2016/data-structures-with-algorithm/tree/master/main/com/algorithm/leetcode/sort)
 
-### Java基础
+### 2. Java基础
 * [NIO](https://github.com/fantj2016/java-reader/tree/master/Java-NIO)
 * [JVM](https://github.com/fantj2016/java-reader/tree/master/JVM)
 * [类加载]()
@@ -21,13 +24,14 @@
 * [设计模式代码+解读](https://github.com/fantj2016/GOF23)
 * [设计模式文章](https://github.com/fantj2016/java-reader/tree/master/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F)
 * [Java手写数据结构](https://github.com/fantj2016/Java-dataStruct)
-##### 源码篇
+
+##### 2.1 源码篇
 * [Java源码、集合源码](https://github.com/fantj2016/java-reader/tree/master/Java%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90)
 
 --- 
 
-### 框架部分
-##### 实战篇
+### 3. 框架部分
+##### 3.1 实战篇
 * [SpringBoot整合&实战](https://github.com/fantj2016/java-reader/tree/master/springboot)
 * [Mybatis使用&常见问题解决](https://github.com/fantj2016/java-reader/tree/master/Mybatis)
 * [SpringSecurity安全框架实战](https://github.com/fantj2016/java-reader/tree/master/Spring-Security)
@@ -35,19 +39,26 @@
 * [Dubbo实战](https://github.com/fantj2016/java-reader/tree/master/dubbo)
 * [Zookeeper部分](https://github.com/fantj2016/java-reader/tree/master/zk)
 * [MQ从入门到实战](https://github.com/fantj2016/java-reader/tree/master/mq)
-##### 源码篇
+
+##### 3.2 源码篇
 * [Spring源码解析](https://github.com/fantj2016/java-reader/tree/master/Spring%E6%BA%90%E7%A0%81)
 * [SpringMvc源码解析](https://github.com/fantj2016/java-reader/tree/master/SpringMvc%E6%BA%90%E7%A0%81)
 * [Mybatis源码解析](https://github.com/fantj2016/java-reader/tree/master/Mybatis%E6%BA%90%E7%A0%81)
 ---
 
-### 常用开发工具
+### 4. 分布式
+* [分布式事务](https://github.com/fantj2016/java-reader/tree/master/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1)
+* [分布式锁]()
+
+---
+
+### 5. 常用开发工具
 * [Git使用&问题排查](https://github.com/fantj2016/java-reader/tree/master/Git)
 * [Maven高级](https://github.com/fantj2016/java-reader/tree/master/Maven)
 
 ---
 
-### Linux运维部分
+### 6. Linux运维部分
 * [CentOS安装工具集](https://github.com/fantj2016/java-reader/tree/master/Centos%E5%AE%89%E8%A3%85%E5%B7%A5%E5%85%B7%E6%96%87%E9%9B%86)
 * [CentOS命令&本地环境配置](https://github.com/fantj2016/java-reader/tree/master/RedHat-CentOS)
 * [Docker从入门到使用](https://github.com/fantj2016/java-reader/tree/master/Docker)
