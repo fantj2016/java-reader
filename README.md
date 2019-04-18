@@ -1,5 +1,10 @@
 
 # java-reader
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/fantj2016/java-reader/blob/master/LICENSE)
+[![微信交流群](https://img.shields.io/badge/%E5%BE%AE%E4%BF%A1%E7%BE%A4-%E4%BA%8C%E7%BB%B4%E7%A0%81-orange.svg)](https://upload-images.jianshu.io/upload_images/5786888-fa5ab6bde180e7ec.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+[![微信公众号](https://img.shields.io/badge/%E5%85%AC%E4%BC%97%E5%8F%B7-PlayInJava-red.svg)](https://upload-images.jianshu.io/upload_images/5786888-fa5ab6bde180e7ec.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+
 >这是我学习java的一些历程，分享给大家，有一些写的不好的完善后再上线。
 
 **不断完善、不断更新**
@@ -82,5 +87,10 @@
 
 ---
 
+### 讨论组
+
+[![codecov](https://codecov.io/gh/apache/incubator-dubbo/branch/master/graph/badge.svg)](https://codecov.io/gh/apache/incubator-dubbo)
+
+![]()
 ### License
 This Project is under the MIT license. See the [LICENSE](https://github.com/fantj2016/java-reader/blob/master/LICENSE) file for detail.
