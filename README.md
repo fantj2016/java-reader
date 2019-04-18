@@ -13,7 +13,7 @@
 * [各种排序](https://github.com/fantj2016/data-structures-with-algorithm/tree/master/main/com/algorithm/leetcode/sort)
 
 ### 2. Java基础
-* [NIO](https://github.com/fantj2016/java-reader/tree/master/Java-NIO)
+- [NIO](https://github.com/fantj2016/java-reader/tree/master/Java-NIO)
 * [JVM](https://github.com/fantj2016/java-reader/tree/master/JVM)
 * [类加载]()
 * [Servlet详解](https://github.com/fantj2016/java-reader/tree/master/Java-Servlet)
@@ -27,6 +27,9 @@
 
 ##### 2.1 源码篇
 * [Java源码、集合源码](https://github.com/fantj2016/java-reader/tree/master/Java%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90)
+
+##### 2.2 面试题
+* [Java基础面试题总结](https://github.com/fantj2016/java-reader/tree/master/Java%E9%9D%A2%E8%AF%95)
 
 --- 
 
@@ -44,11 +47,19 @@
 * [Spring源码解析](https://github.com/fantj2016/java-reader/tree/master/Spring%E6%BA%90%E7%A0%81)
 * [SpringMvc源码解析](https://github.com/fantj2016/java-reader/tree/master/SpringMvc%E6%BA%90%E7%A0%81)
 * [Mybatis源码解析](https://github.com/fantj2016/java-reader/tree/master/Mybatis%E6%BA%90%E7%A0%81)
+
+##### 3.3 面试题
+* [Spring面试题]()
+* [SpringMvc面试题]()
+* [Mybatis面试题]()
+
 ---
 
 ### 4. 分布式
 * [分布式事务](https://github.com/fantj2016/java-reader/tree/master/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1)
 * [分布式锁]()
+
+##### 4.1 分布式面试题
 
 ---
 
@@ -57,6 +68,9 @@
 * [Maven高级](https://github.com/fantj2016/java-reader/tree/master/Maven)
 
 ---
+### 6. 大数据
+* [Hadoop、Hive、Sqoop、Flume、Azkaban、Spark服务搭建](https://github.com/fantj2016/java-reader/tree/master/Centos%E5%AE%89%E8%A3%85%E5%B7%A5%E5%85%B7%E6%96%87%E9%9B%86)
+* [Hadoop、Hive、Sqoop、Flume、Azkaban、Spark入门到实战](https://github.com/fantj2016/java-reader/tree/master/BigData)
 
 ### 6. Linux运维部分
 * [CentOS安装工具集](https://github.com/fantj2016/java-reader/tree/master/Centos%E5%AE%89%E8%A3%85%E5%B7%A5%E5%85%B7%E6%96%87%E9%9B%86)
