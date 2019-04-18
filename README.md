@@ -18,6 +18,8 @@
 * [各种排序](https://github.com/fantj2016/data-structures-with-algorithm/tree/master/main/com/algorithm/leetcode/sort)
 
 ### 2. Java基础
+>JVM、并发、NIO、类加载、Tomcat类加载、JDBC详解、Servlet详解、Java反射详解、函数式编程(Lambda+Stream)、数据结构、设计模式
+
 * [NIO](https://github.com/fantj2016/java-reader/tree/master/Java-NIO)
 * [JVM](https://github.com/fantj2016/java-reader/tree/master/JVM)
 * [类加载]()
@@ -31,6 +33,7 @@
 * [Java手写数据结构](https://github.com/fantj2016/Java-dataStruct)
 
 ##### 2.1 源码篇
+>ArrayList、HashMap、LinkedList、ThreadPoolExector源码解析
 * [Java源码、集合源码](https://github.com/fantj2016/java-reader/tree/master/Java%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90)
 
 ##### 2.2 面试题
@@ -52,6 +55,7 @@
 * [Spring源码解析](https://github.com/fantj2016/java-reader/tree/master/Spring%E6%BA%90%E7%A0%81)
 * [SpringMvc源码解析](https://github.com/fantj2016/java-reader/tree/master/SpringMvc%E6%BA%90%E7%A0%81)
 * [Mybatis源码解析](https://github.com/fantj2016/java-reader/tree/master/Mybatis%E6%BA%90%E7%A0%81)
+* [两种动态代理]()
 
 ##### 3.3 面试题
 * [Spring面试题]()
