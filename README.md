@@ -18,7 +18,7 @@
 * [各种排序](https://github.com/fantj2016/data-structures-with-algorithm/tree/master/main/com/algorithm/leetcode/sort)
 
 ### 2. Java基础
-- [NIO](https://github.com/fantj2016/java-reader/tree/master/Java-NIO)
+* [NIO](https://github.com/fantj2016/java-reader/tree/master/Java-NIO)
 * [JVM](https://github.com/fantj2016/java-reader/tree/master/JVM)
 * [类加载]()
 * [Servlet详解](https://github.com/fantj2016/java-reader/tree/master/Java-Servlet)
