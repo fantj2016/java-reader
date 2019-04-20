@@ -5,7 +5,7 @@
 [![微信公众号](https://img.shields.io/badge/%E5%85%AC%E4%BC%97%E5%8F%B7-PlayInJava-red.svg)](https://upload-images.jianshu.io/upload_images/5786888-fa5ab6bde180e7ec.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 
->这是我学习java的一些历程，分享给大家，有一些写的不好的完善后再上线，谢谢大家的支持。
+>这是我学习java的一些历程，分享给大家，有一些写的不好的完善后再上线，谢谢大家的支持，转载请标明出处，谢谢。
 
 **不断完善、不断更新**
 
