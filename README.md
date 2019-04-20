@@ -13,9 +13,11 @@
 
 ### 1. 算法
 >Java开发高频考试简单算法。
-* [Leetcode](https://github.com/fantj2016/data-structures-with-algorithm/tree/master/main/com/algorithm/leetcode)
-* [剑指Offer](https://github.com/fantj2016/data-structures-with-algorithm/tree/master/main/com/algorithm/offer)
-* [各种排序](https://github.com/fantj2016/data-structures-with-algorithm/tree/master/main/com/algorithm/leetcode/sort)
+* [Leetcode题目解析](https://github.com/fantj2016/java-reader/tree/master/leetcode)
+* [Leetcode项目代码](https://github.com/fantj2016/data-structures-with-algorithm/tree/master/main/com/algorithm/leetcode)
+* [剑指Offer项目代码](https://github.com/fantj2016/data-structures-with-algorithm/tree/master/main/com/algorithm/offer)
+* [剑指Offer题目解析](https://github.com/fantj2016/java-reader/tree/master/%E5%89%91%E6%8C%87offer)
+* [各种排序项目代码](https://github.com/fantj2016/data-structures-with-algorithm/tree/master/main/com/algorithm/leetcode/sort)
 
 ### 2. Java基础
 >JVM、并发、NIO、类加载、Tomcat类加载、JDBC详解、Servlet详解、Java反射详解、函数式编程(Lambda+Stream)、数据结构、设计模式
