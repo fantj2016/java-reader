@@ -1,6 +1,8 @@
+本文翻译自： http://tutorials.jenkov.com/java-reflection/index.html
+
 尽管普遍认为通过Java Reflection可以访问其他类的私有字段和方法。 这并不困难。 这在单元测试中可以非常方便。 本文将告诉你如何。
   
-###访问私有字段
+### 访问私有字段
 要访问私有字段，您需要调用Class.getDeclaredField（String name）或Class.getDeclaredFields（）方法。 方法Class.getField（String name）和Class.getFields（）方法只返回公共字段，所以它们将不起作用。 下面是一个带有私有字段的类的简单例子，下面是通过Java反射访问该字段的代码：
 ```
 public class PrivateObject {
@@ -28,7 +30,7 @@ System.out.println("fieldValue = " + fieldValue);
 注意使用PrivateObject.class.getDeclaredField（“privateString”）方法。 这是这个方法调用返回私人字段。 此方法只返回在该特定类中声明的字段，而不是在任何超类中声明的字段。
 
 注意粗线也是。 通过调用Field.setAccessible（true），可以关闭对此特定字段实例的访问检查，仅用于反射。 现在，即使调用者不是这些范围的一部分，即使它是私有的，受保护的或包的范围，也可以访问它。 您仍然无法使用正常代码访问该字段。 编译器不会允许它。
-###访问私有方法
+### 访问私有方法
 要访问私有方法，您将需要调用Class.getDeclaredMethod（String name，Class [] parameterTypes）或Class.getDeclaredMethods（）方法。 方法Class.getMethod（String name，Class [] parameterTypes）和Class.getMethods（）方法只返回公共方法，所以它们将不起作用。 下面是一个带私有方法的类的简单示例，下面是通过Java反射访问该方法的代码：
 ```
 public class PrivateObject {
@@ -61,7 +63,7 @@ System.out.println("returnValue = " + returnValue);
 注意使用PrivateObject.class.getDeclaredMethod（“privateString”）方法。 正是这个方法调用返回私有方法。
  通过调用Method.setAccessible（true），可以关闭此特定Method实例的访问检查，仅用于反射。 现在，即使调用者不是这些范围的一部分，即使它是私有的，受保护的或包的范围，也可以访问它。 您仍然无法使用普通代码访问该方法。 编译器不会允许它。
 
-###实战
+### 实战
 
 
 ```
@@ -168,5 +170,3 @@ public class People {
 shuai
 Fant.J is so cool
 ```
-
-项目代码：[github链接](https://github.com/jiaofanting/Java-nio-and-netty-spring-demo/tree/master/src/com/reflection/detail)

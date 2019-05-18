@@ -1,4 +1,4 @@
-####方法一：继承Thread类，作为线程对象存在（继承Thread对象）
+#### 方法一：继承Thread类，作为线程对象存在（继承Thread对象）
 ```
 public class CreatThreadDemo1 extends Thread{
     /**
@@ -33,11 +33,11 @@ public class CreatThreadDemo1 extends Thread{
 }
 ```
 常规方法，不多做介绍了，interrupted方法，是来判断该线程是否被中断。（终止线程不允许用stop方法，该方法不会施放占用的资源。所以我们在设计程序的时候，要按照中断线程的思维去设计，就像上面的代码一样）。
-######让线程等待的方法
+###### 让线程等待的方法
 * Thread.sleep(200);  //线程休息2ms
 * Object.wait()；  //让线程进入等待，直到调用Object的notify或者notifyAll时，线程停止休眠
 
-####方法二：实现runnable接口，作为线程任务存在
+#### 方法二：实现runnable接口，作为线程任务存在
 ```
 public class CreatThreadDemo2 implements Runnable {
     @Override
@@ -57,7 +57,7 @@ public class CreatThreadDemo2 implements Runnable {
 ```
 Runnable 只是来修饰线程所执行的任务，它不是一个线程对象。想要启动Runnable对象，必须将它放到一个线程对象里。
 
-####方法三：匿名内部类创建线程对象
+#### 方法三：匿名内部类创建线程对象
 ```
 public class CreatThreadDemo3 extends Thread{
     public static void main(String[] args) {
@@ -96,7 +96,7 @@ public class CreatThreadDemo3 extends Thread{
 ，我们可以看到Thread实现了Runnable接口，而Runnable接口里有一个run方法。
 所以，我们最终调用的重写的方法应该是Thread类的run方法。而不是Runnable接口的run方法。
 
-####方法四：创建带返回值的线程
+#### 方法四：创建带返回值的线程
 ```
 public class CreatThreadDemo4 implements Callable {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
@@ -139,7 +139,7 @@ public interface Callable<V> {
 ```
 返回指定泛型的call方法。然后调用FutureTask对象的get方法得道call方法的返回值。
 
-####方法五：定时器Timer
+#### 方法五：定时器Timer
 ```
 public class CreatThreadDemo5 {
 
@@ -156,7 +156,7 @@ public class CreatThreadDemo5 {
     }
 }
 ```
-####方法六：线程池创建线程
+#### 方法六：线程池创建线程
 ```
 public class CreatThreadDemo6 {
     public static void main(String[] args) {
@@ -181,7 +181,7 @@ public class CreatThreadDemo6 {
 }
 
 ```
-####方法七：利用java8新特性  stream 实现并发
+#### 方法七：利用java8新特性  stream 实现并发
 lambda表达式不懂的，可以看看我的java8新特性文章：
 java8-lambda：https://www.jianshu.com/p/3a08dc78a05f
 java8-stream：https://www.jianshu.com/p/ea16d6712a00

@@ -1,10 +1,10 @@
 Java从JDK1.5开始提供了java.util.concurrent.atomic包，方便程序员在多线程环境下，无锁的进行原子操作。原子变量的底层使用了处理器提供的原子指令，但是不同的CPU架构可能提供的原子指令不一样，也有可能需要某种形式的内部锁,所以该方法不能绝对保证线程不被阻塞。
-###Atomic包介绍
+### Atomic包介绍
 官方解释：一个小型工具包，支持单变量上的无锁线程安全编程。
 ![image.png](http://upload-images.jianshu.io/upload_images/5786888-98aaa28314c8db01.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 可以看到，它里面有17个java类。
 
-###原子更新基本类型类
+### 原子更新基本类型类
 用于通过原子的方式更新基本类型，Atomic包提供了以下三个类：
 
 * AtomicBoolean：原子更新布尔类型。
@@ -19,7 +19,7 @@ AtomicInteger的常用方法如下：
 *   void lazySet(int newValue)：最终会设置成newValue，使用lazySet设置值后，可能导致其他线程在之后的一小段时间内还是可以读到旧的值。关于该方法的更多信息可以参考并发网翻译的一篇文章《[AtomicLong.lazySet是如何工作的？](http://ifeve.com/how-does-atomiclong-lazyset-work/ "AtomicLong.lazySet是如何工作的？")》
 *   int getAndSet(int newValue)：以原子方式设置为newValue的值，并返回旧值。
 
-#####AtomicInteger实例
+##### AtomicInteger实例
 ```
 package com.thread.atomic;
 
@@ -84,7 +84,7 @@ public class AtomicIntegerTest {
 
 Atomic包提供了三种基本类型的原子更新，但是Java的基本类型里还有char，float和double等。那么问题来了，如何原子的更新其他的基本类型呢？Atomic包里的类基本都是使用Unsafe实现的，让我们一起看下[Unsafe的源码](http://www.docjar.com/html/api/sun/misc/Unsafe.java.html)，发现Unsafe只提供了三种CAS方法，compareAndSwapObject，compareAndSwapInt和compareAndSwapLong，再看AtomicBoolean源码，发现其是先把Boolean转换成整型，再使用compareAndSwapInt进行CAS，所以原子更新double也可以用类似的思路来实现。
 
-###原子更新数组类
+### 原子更新数组类
 通过原子的方式更新数组里的某个元素，Atomic包提供了以下三个类：
 
 * AtomicIntegerArray：原子更新整型数组里的元素。
@@ -109,7 +109,7 @@ public class AtomicIntegerArrayTest {
 ```
 
 
-###原子更新引用类型
+### 原子更新引用类型
 原子更新基本类型的AtomicInteger，只能更新一个变量，如果要原子的更新多个变量，就需要使用这个原子更新引用类型提供的类。Atomic包提供了以下三个类：
 
 AtomicReference：原子更新引用类型。
@@ -169,7 +169,7 @@ public class AtomicReferenceTest {
 
 ```
 
-###原子更新字段类
+### 原子更新字段类
 **如果我们只需要某个类里的某个字段，那么就需要使用原子更新字段类**，Atomic包提供了以下三个类：
 
 * AtomicIntegerFieldUpdater：原子更新整型的字段的更新器。
@@ -238,13 +238,13 @@ public class AtomicIntegerFieldUpdaterTest {
 
 那最后，再来解一下CAS的疑惑
 
-#####什么是CAS
+##### 什么是CAS
 
 CAS，Compare and Swap即比较并交换。 java.util.concurrent包借助CAS实现了区别于synchronized同步锁的一种**乐观锁**。乐观锁就是每次去取数据的时候都乐观的认为数据不会被修改，所以不会上锁，但是在更新的时候会判断一下在此期间数据有没有更新。CAS有3个操作数：内存值V，旧的预期值A，要修改的新值B。当且仅当预期值A和内存值V相同时，将内存值V修改为B，否则什么都不做。CAS的关键点在于，系统**在硬件层面保证了比较并交换操作的原子性**，处理器使用基于对缓存加锁或总线加锁的方式来实现多处理器之间的原子操作。
 
 
 
-######CAS的优缺点
+###### CAS的优缺点
 
 * CAS由于是在硬件层面保证的原子性，不会锁住当前线程，它的效率是很高的。 
 

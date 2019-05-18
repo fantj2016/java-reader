@@ -1,11 +1,13 @@
+本问翻译自：http://tutorials.jenkov.com/jdbc/index.html
+
 CallableStatement 和 PreparedStatement用法特别相似，只是CallableStatement 可以用来调用存储过程。
 
-###存储过程简介调用简介
+### 存储过程简介调用简介
 >SQL语句需要先编译然后执行，而存储过程（Stored Procedure）是一组为了完成特定功能的SQL语句集，经编译后存储在数据库中，用户通过指定存储过程的名字并给定参数（如果该存储过程带有参数）来调用执行它。
 
 >存储过程是可编程的函数，在数据库中创建并保存，可以由SQL语句和控制结构组成。当想要在不同的应用程序或平台上执行相同的函数，或者封装特定功能时，存储过程是非常有用的。数据库中的存储过程可以看做是对编程中面向对象方法的模拟，它允许控制数据的访问方式。
 
-#####存储过程的优点：
+##### 存储过程的优点：
 
 (1). 增强SQL语言的功能和灵活性：存储过程可以用控制语句编写，有很强的灵活性，可以完成复杂的判断和较复杂的运算。
 
@@ -17,10 +19,10 @@ CallableStatement 和 PreparedStatement用法特别相似，只是CallableStatem
 
 (5). 作为一种安全机制来充分利用：通过对执行某一存储过程的权限进行限制，能够实现对相应的数据的访问权限的限制，避免了非授权用户对数据的访问，保证了数据的安全。
 
-###MySQL的存储过程
+### MySQL的存储过程
 存储过程是数据库的一个重要的功能，MySQL 5.0以前并不支持存储过程，这使得MySQL在应用上大打折扣。好在MySQL 5.0开始支持存储过程，这样即可以大大提高数据库的处理速度，同时也可以提高数据库编程的灵活性。
 
-###1. 创建MySQL存储过程
+### 1. 创建MySQL存储过程
 ```
 DELIMITER //
 create procedure findById(IN pid INTEGER)
@@ -29,7 +31,7 @@ SELECT * FROM `user` WHERE id= pid;
 END //
 DELIMITER;
 ```
-###2. 调用存储过程
+### 2. 调用存储过程
 ```
 package com.jdbc;
 
@@ -80,10 +82,10 @@ public class CallableStatementTest {
  Fant.J reUseTest  2017-04-20 男 xxxx
 ```
 
-###3. 全面科普
+### 3. 全面科普
 通过前面的讲解和例子，我想你肯定已经了解调用存储过程到底是个什么东西，但是你肯定也能看到，这例子只是一个特例，所以我在这里把 调用存储代码中的sql做个详解。
 
-#####存储过程参数详解
+##### 存储过程参数详解
 * in：往过程里传参。    （参考我创建存储过程中的代码(IN pid INTEGER)）
 * out：往过程外传参。
 * inout：in and out

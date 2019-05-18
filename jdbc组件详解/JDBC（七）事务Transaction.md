@@ -1,3 +1,5 @@
+本问翻译自：http://tutorials.jenkov.com/jdbc/index.html
+
 事务Transaction是一组要作为单一的原子动作进行的行为。 要么执行所有的操作，要么都不执行。
 
 我们可以通过它来调用事务：
@@ -30,7 +32,7 @@ try{
 }
 ```
 
-###完整示例
+### 完整示例
 ```
 Connection connection = ...
 try{

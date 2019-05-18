@@ -1,3 +1,5 @@
+本问翻译自：http://tutorials.jenkov.com/jdbc/index.html
+
 PreparedStatement 是一个特殊的Statement对象，如果我们只是来查询或者更新数据的话，最好用PreparedStatement代替Statement，因为它有以下有点：
 * 简化Statement中的操作
 * 提高执行语句的性能
@@ -9,7 +11,7 @@ Statement 和 PreparedStatement之间的关系和区别.
 - 关系：PreparedStatement继承自Statement,都是接口
 - 区别：PreparedStatement可以使用占位符，是预编译的，批处理比Statement效率高    
 
-###创建一个PreparedStatement
+### 创建一个PreparedStatement
 PreparedStatement对象的创建也同样离不开 DriverManger.getConnect()对象，因为它也是建立在连接到数据库之上的操作。
 ```
 connection = DriverManager.getConnection(url,user,password);
@@ -17,7 +19,7 @@ String sql = "update user set username=? where id = ?";
 PreparedStatement preparedStatement = connection.prepareStatement(sql);
 ```
 
-###往PreparedStatement里写入参数
+### 往PreparedStatement里写入参数
 
 看上面那个sql 字符串，中间有几个?，它在这里有点占位符的意思，然后我们可以通过PreparedStatement的setString(),等方法来给占位符进行赋值，使得sql语句变得灵活。
 ```
@@ -31,8 +33,8 @@ PreparedStatement preparedStatement = connection.prepareStatement(sql);
 ```
 参数中的第一个参数分别是1和2，它代表的是第几个问号的位置。如果sql语句中只有一个问号，那就不用声明这个参数。
 
-###执行PreparedStatement
-######执行查询
+### 执行PreparedStatement
+###### 执行查询
 如果是执行查询数据库的话，也像Statement对象执行excuteQuery()一样返回一个ResultSet结果集。这里就不多详述：
 ```
             String sql = "select * from user";
@@ -55,7 +57,7 @@ PreparedStatement preparedStatement = connection.prepareStatement(sql);
   Fant.J 2017-04-20 男 xxxx
 ```
 
-###复用PreparedStatement
+### 复用PreparedStatement
 什么叫复用，就是一次实例化，多次使用。
 ```
             preparedStatement.setString(1,"Fant.J");
@@ -86,7 +88,7 @@ PreparedStatement preparedStatement = connection.prepareStatement(sql);
 ```
   Fant.J reUseTest 2017-04-20 男 xxxx
 ```
-###完整代码
+### 完整代码
 ```
 package com.jdbc;
 
@@ -146,12 +148,12 @@ public class PreparedStatementTest {
 
 ```
 
-###PreparedStatement性能分析
+### PreparedStatement性能分析
 数据库解析SQL字符串需要时间，并为其创建查询计划。查询计划是分析数据库如何以最有效的方式执行查询。
 
 如果为每个查询或数据库更新提交新的完整SQL语句，则数据库必须解析SQL，并为查询创建查询计划。通过重用现有的PreparedStatement，可以为后续查询重用SQL解析和查询计划。这通过减少每个执行的解析和查询计划开销来加速查询执行。
 
-######PreparedStatement有两个潜在的重用（复用）级别。
+###### PreparedStatement有两个潜在的重用（复用）级别。
 
 * JDBC驱动程序重新使用PreparedStatement。
 * 数据库重用PreparedStatement。

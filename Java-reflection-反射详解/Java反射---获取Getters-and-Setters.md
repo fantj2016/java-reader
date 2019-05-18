@@ -1,3 +1,5 @@
+本文翻译自： http://tutorials.jenkov.com/java-reflection/index.html
+
 使用Java反射，您可以检查类的方法并在运行时调用它们。 这可以用来检测给定的类有哪些getter和setter。 你不能明确地要求getter和setter，所以你将不得不扫描一个类的所有方法，并检查每个方法是否是getter或setter。
 首先让我们建立一个 getters and setters的规则：
 * get getter方法的名字以“get”开始，取0个参数，并返回一个值。
@@ -31,7 +33,7 @@ public static boolean isSetter(Method method){
 }
 ```
 
-###实战
+### 实战
 ```
 package com.reflection.detail;
 
@@ -112,7 +114,6 @@ setter: public void com.reflection.detail.People.setName(java.lang.String)
 setter: public void com.reflection.detail.People.setId(java.lang.Integer)
 getter: public final native java.lang.Class java.lang.Object.getClass()
 ```
-项目代码：[github链接](https://github.com/jiaofanting/Java-nio-and-netty-spring-demo/tree/master/src/com/reflection/detail)
 
 
 

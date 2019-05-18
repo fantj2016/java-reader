@@ -1,3 +1,5 @@
+本问翻译自：http://tutorials.jenkov.com/java-servlets/index.html
+
 Servlet Filter 可以拦截所有指向服务端的请求。
 
 ![Servlet Filter.png](http://upload-images.jianshu.io/upload_images/5786888-5cf65328e0331541.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
@@ -69,7 +71,7 @@ throws IOException, ServletException {
 }
 ```
 
-###在web.xml里配置过滤器/拦截器
+### 在web.xml里配置过滤器/拦截器
 ```
 <filter>
     <filter-name>myFilter</filter-name>

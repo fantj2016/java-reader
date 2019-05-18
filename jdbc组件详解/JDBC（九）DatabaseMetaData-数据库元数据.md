@@ -1,15 +1,16 @@
+本问翻译自：http://tutorials.jenkov.com/jdbc/index.html
 
 通过java.sql.DatabaseMetaData 接口，我们能获取到数据库的列表、列等信息。
 
 DatabaseMetaData 接口包含了许多方法，这里值介绍常用的。
 
-###获取 DatabaseMetaData 实例对象
+### 获取 DatabaseMetaData 实例对象
 
 ```
 DatabaseMetaData databaseMetaData = connection.getMetaData();
 ```
 
-###获取数据库名和版本
+### 获取数据库名和版本
 ```
 int    majorVersion   = databaseMetaData.getDatabaseMajorVersion();
 int    minorVersion   = databaseMetaData.getDatabaseMinorVersion();
@@ -20,13 +21,13 @@ String productVersion = databaseMetaData.getDatabaseProductVersion();
 ```
 数据库属性信息：5 6 MySQL 5.6.24
 ```
-###获取数据库驱动版本
+### 获取数据库驱动版本
 ```
 int driverMajorVersion = databaseMetaData.getDriverMajorVersion();
 int driverMinorVersion = databaseMetaData.getDriverMinorVersion();
 ```
 
-###获取数据库列表
+### 获取数据库列表
 
 ```
 String   catalog          = null;
@@ -52,7 +53,7 @@ getTables()方法源码：
 ```
 user
 ```
-###在表中列出列
+### 在表中列出列
 
 ```
 String   catalog           = null;
@@ -77,7 +78,7 @@ birthday 91
 sex 1 
 address 12 
 ```
-###表的主键
+### 表的主键
 ```
 String   catalog   = null;
 String   schema    = null;
@@ -100,7 +101,7 @@ id
 ```
 
 
-###全部代码
+### 全部代码
 ```
 package com.jdbc;
 

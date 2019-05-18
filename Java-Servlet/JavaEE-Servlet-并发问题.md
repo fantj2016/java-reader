@@ -1,3 +1,5 @@
+本问翻译自：http://tutorials.jenkov.com/java-servlets/index.html
+
 Java servlet容器/ Web服务器通常是多线程的。
 
 为了确保servlet是线程安全的，必须遵循以下基本规则：

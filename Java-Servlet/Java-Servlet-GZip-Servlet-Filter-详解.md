@@ -1,26 +1,28 @@
+本问翻译自：http://tutorials.jenkov.com/java-servlets/index.html
+
 GZip Servlet过滤器可用于GZip压缩内容从Java Web应用程序发送到浏览器。
 
-###为什么要压缩
+### 为什么要压缩
 
 Gzip压缩HTML、js、css等，使得发送给浏览器的数据大小变得更小。提升上传速度，尤其是移动端带宽受限制的情况下，不过它可能带来服务器和浏览器的CPU消耗问题，但是响应速度会得道很大的改善。
 
-###GZip 请求头
+### GZip 请求头
 
 浏览器在发送到HTTP服务器（例如Java Web服务器）的请求中包含Accept-Encoding HTTP标头。 Accept-Encoding标头的内容告诉浏览器可以接受哪些内容编码。 如果该标题包含gzip值，则浏览器可以接受GZip压缩内容。 然后服务器可以将GZip压缩发送回浏览器的内容。
 
 如果从服务器发回的内容是GZip压缩的，则服务器会在HTTP响应中包含带有值gzip的Content-Encoding HTTP标头。 这样浏览器就知道内容是GZip压缩的。
 
-###为什么使用GZip Servlet过滤器？
+### 为什么使用GZip Servlet过滤器？
 
 如果对每一个Servlet请求都设置压缩，那肯定在性能上会有差距，所以Gzip Servlet过滤器 可以让我们对需要压缩的东西进行压缩，没必要压缩的就不去压缩。使性能最大化的提升。
 
-###GZip Servlet滤波器设计
+### GZip Servlet滤波器设计
 ![image.png](http://upload-images.jianshu.io/upload_images/5786888-93e32f829b7f4b77.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 如图所示：首先需要一个Servlet过滤器类。 该类映射到web.xml文件中的一组URL。
 当一个HTTP请求到达映射到过滤器的Servlet容器时，过滤器会在该请求被Servlet，JSP等处理之前截取请求所针对的目标。 GZip servlet过滤器检查客户端（浏览器）是否可以接受GZip压缩内容。如果可以接受，就对目标做压缩处理，然后将HttpServletResponse对象封装在GZipServletResponseWrapper进行压缩，最后将压缩内容写入HttpServletResponse。
 
-###实例
+### 实例
 The code consists of 3 classes. A GZipServletFilter, a GZipServletResponseWrapper and a GZipServletOutputStream.
 
 The GZipServletOutputStream is what compresses the content written to it. It does so by using a GZIPOutputStream internally, which is a standard Java class.
@@ -206,7 +208,7 @@ class GZipServletOutputStream extends ServletOutputStream {
   }
 }
 ```
-###web.xml 配置
+### web.xml 配置
 
 为了激活Gzip Servlet Filter，我们需要配置一些东西。
 ```

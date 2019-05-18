@@ -12,7 +12,7 @@ UDP协议在IP协议上增加了复用、分用和差错检测功能。UDP的特
 
        F)UDP的头部占用较小，只占用8个字节。
 
-###UDP报文格式
+### UDP报文格式
   UDP协议分为首部字段和数据字段，其中首部字段只占用8个字节，分别是个占用两个字节的源端口、目的端口、长度和检验和。
 ![](http://upload-images.jianshu.io/upload_images/5786888-6d3608d3dff36744.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 

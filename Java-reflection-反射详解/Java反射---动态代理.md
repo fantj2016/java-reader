@@ -1,10 +1,13 @@
+本文翻译自： http://tutorials.jenkov.com/java-reflection/index.html
+
 使用Java反射，您可以在运行时创建接口的动态实现。 你可以使用类java.lang.reflect.Proxy。 这个类的名字是我将这些动态接口实现称为动态代理的原因。 动态代理可以用于许多不同的目的，例如， 数据库连接和事务管理，用于单元测试的动态模拟对象，以及其他类似于AOP的方法拦截目的。
 
-###创建代理
+### 创建代理
 您使用Proxy.newProxyInstance（）方法创建动态代理。 newProxyInstance（）方法需要3个参数：
 1. 用于“加载”动态代理类的ClassLoader。
 2. 要实现的接口数组。
 3. 一个InvocationHandler将代理上的所有方法调用转发。
+
 这里是一个例子：
 ```
 InvocationHandler handler = new MyInvocationHandler();
@@ -14,7 +17,8 @@ MyInterface proxy = (MyInterface) Proxy.newProxyInstance(
                             handler);
 ```
 运行此代码后，代理变量包含MyInterface接口的动态实现。 所有对代理的调用都将被转发给一般的InvocationHandler接口的处理程序实现。 InvocationHandler在下一节中介绍。
-###InvocationHandler 
+### InvocationHandler 
+
 如前所述，您必须将InvocationHandler实现传递给Proxy.newProxyInstance（）方法。 所有对动态代理的方法调用都被转发给这个InvocationHandler实现。 以下是InvocationHandler接口的外观：
 ```
 public interface InvocationHandler{
@@ -22,6 +26,7 @@ public interface InvocationHandler{
          throws Throwable;
 }
 ```
+
 下面是一个示例实现:
 ```
 public class MyInvocationHandler implements InvocationHandler{
@@ -39,7 +44,7 @@ public class MyInvocationHandler implements InvocationHandler{
 Object [] args数组包含调用接口中的方法时传递给代理的参数值。 注意：被实现的接口中的基本元素（int，long等）被封装在它们的对象（Integer，Long等）中。
 
 
-#####数据库连接和事务管理
+##### 数据库连接和事务管理
 Spring框架有一个事务代理，可以为你启动和提交/回滚事务。 在高级连接和事务划分和传播的文本中更详细地描述了这个工作原理，所以我只简要描述它。 通话顺序变成这
 ```
 web controller --> proxy.execute(...);

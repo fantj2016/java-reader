@@ -1,11 +1,11 @@
 >Lock就像synchronized块一样是一个线程同步机制。 然而，Lock定比synchronized更灵活、更复杂。
 
-###Lock和synchronized块 的区别
+### Lock和synchronized块 的区别
 * 同步块不保证等待输入它的线程被授予访问权限的顺序。
 * 不能将任何参数传递给同步块的条目。
 * 同步块必须完全包含在单个方法中。 一个Lock可以在不同的方法中调用lock（）和unlock（）。
 
-###简单例子
+### 简单例子
 ```
 Lock lock = new ReentrantLock();
 
@@ -17,7 +17,7 @@ lock.unlock();
 ```
 其中，你应该能够猜到，lock() 方法是加锁，unlock()方法是解锁。
 
-###Lock接口含有的方法
+### Lock接口含有的方法
 * lock()
 * lockInterruptibly()
 * tryLock()
@@ -34,7 +34,7 @@ tryLock（long timeout，TimeUnit timeUnit）的工作方式与tryLock（）方�
 
 unlock（）方法解锁Lock实例。 通常，Lock实现将只允许已锁定Lock的线程调用此方法。 调用此方法的其他线程可能会导致未经检查的异常（RuntimeException）。
 
-###ReentrantLock实例
+### ReentrantLock实例
 ReentrantLock 可重入锁，是Lock的一个子类。我们这里来使用它实现线程安全编程。
 ```
 package com.lock;
@@ -227,7 +227,7 @@ public class MyLockTest {
 
 ```
 结果没有出现线程安全问题，这里不做截图了，自己可以试试。但是我们写的方法还有一定的问题，就是MyLock这个类不支持 可重入锁，意思就是如果有两个锁嵌套，如果相同的线程先调用a方法，再调用带锁的b方法，则就会进入自旋锁。
-#####测试方法源码
+##### 测试方法源码
 ```
 package com.lock;
 
@@ -277,7 +277,7 @@ public class MyLockTest2 {
 
 执行该方法后，我们会发现，线程停止在打印出"a"后，一直在等待。这就是因为该锁不是可重入锁。
 
-#####可重入锁的设计
+##### 可重入锁的设计
 我在这里只贴和上面代码不同的部分。
 ```
 public class MyLock implements Lock {

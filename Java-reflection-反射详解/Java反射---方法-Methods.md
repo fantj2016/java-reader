@@ -1,5 +1,7 @@
+本文翻译自： http://tutorials.jenkov.com/java-reflection/index.html
+
 使用Java反射，您可以检查类的方法并在运行时调用它们。 这是通过Java类java.lang.reflect.Method完成的。 本文将更详细地介绍Java方法对象。
-###获取方法对象
+### 获取方法对象
 Method类是从Class对象中获得的。 这里是一个例子：
 ```
 Class aClass = ...//obtain class object
@@ -21,7 +23,7 @@ Class  aClass = ...//obtain class object
 Method method =
     aClass.getMethod("doSomething", null);
 ```
-###方法参数和返回类型
+### 方法参数和返回类型
 你可以阅读一个给定的方法是这样的参数：
 ```
 Method method = ... // obtain method - see above
@@ -32,7 +34,7 @@ Class[] parameterTypes = method.getParameterTypes();
 Method method = ... // obtain method - see above
 Class returnType = method.getReturnType();
 ```
-###使用方法对象调用方法   invoke
+### 使用方法对象调用方法   invoke
 你可以调用像这样的方法：
 ```
 //get method that takes a String as argument
@@ -44,7 +46,7 @@ null参数是要调用该方法的对象。 如果方法是静态的，则提供
 
 Method.invoke（Object target，Object ... parameters）方法接受可选数量的参数，但是您必须为要调用的方法中的每个参数提供一个参数。 在这种情况下，这是一个采取字符串的方法，所以必须提供一个字符串。
 
-###实战
+### 实战
 
 ```
 package com.reflection.detail;
@@ -89,7 +91,6 @@ public class Reflection_Methods {
 ```
 Fant.J
 ```
-项目代码：[github链接](https://github.com/jiaofanting/Java-nio-and-netty-spring-demo/tree/master/src/com/reflection/detail)
 
 
 

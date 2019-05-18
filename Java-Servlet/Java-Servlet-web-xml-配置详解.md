@@ -1,6 +1,8 @@
+本问翻译自：http://tutorials.jenkov.com/java-servlets/index.html
+
 要从浏览器访问Java servlet，必须告诉servlet容器要部署哪些servlet以及要将servlet映射到哪个URL。 这是在Java Web应用程序的web.xml文件中完成的。
 
-###配置和映射Servlet
+### 配置和映射Servlet
 我们来看一个例子：
 
 ```
@@ -37,7 +39,7 @@
 ```
 *是通配符，意思是任何文本。 如您所见，您可以使用通配符（*）将servlet映射到单个特定的URL或URL的模式。 你将使用什么取决于servlet的功能。
 
-#####Servlet初始参数
+##### Servlet初始参数
 您可以从web.xml文件将参数传递给servlet。 servlet的init参数只能由该servlet访问。 
 如何在web.xml文件中配置它们的方法：
 ```
@@ -70,7 +72,7 @@ public class SimpleServlet extends GenericServlet {
 }
 ```
 servlet容器首次加载servlet时会调用servlets init（）方法。 在加载servlet之前，是不会允许访问该servlet。
-####Servlet加载启动
+#### Servlet加载启动
 <servlet>元素有一个名为<load-on-startup>的子元素，您可以使用它来控制何时servlet容器应该加载servlet。 如果不指定<load-on-startup>元素，那么servlet容器通常会在第一个请求到达时加载servlet。
 
 通过设置<load-on-startup>元素，可以告诉servlet容器在servlet容器启动后立即加载servlet。 请记住，在加载servlet时调用Servlet init（）方法。
@@ -89,7 +91,7 @@ servlet容器首次加载servlet时会调用servlets init（）方法。 在加�
 ```
 <load-on-startup>元素中的数字告诉servlet容器应该按什么顺序加载servlet。 较低的数字首先被加载。 如果该值为负数或未指定，则servlet容器可以随时加载servlet。
 
-####Context 参数
+#### Context 参数
 可以设置一些上下文参数，这些参数可以从应用程序中的所有servlet中读取。
 那该如何配置呢？
 ```

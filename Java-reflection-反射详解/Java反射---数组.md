@@ -1,14 +1,16 @@
+本文翻译自： http://tutorials.jenkov.com/java-reflection/index.html
+
 在Java中使用数组反射有时可能有点棘手。 特别是如果您需要获取某个类型的数组的类对象，如int []等。本文将讨论如何通过Java Reflection创建数组并获取其类对象。
-###java.lang.reflect.Array中
+### java.lang.reflect.Array中
 通过Java处理数组反射是使用java.lang.reflect.Array类完成的。 请不要将此类与Java Collections套件中的java.util.Arrays类混淆，该类包含用于对数组进行排序的实用程序方法，将它们转换为集合等。
 
-###创建数组
+### 创建数组
 通过Java创建数组反射是使用java.lang.reflect.Array类完成的。 下面是一个显示如何创建数组的示例：
 ```
 int[] intArray = (int[]) Array.newInstance(int.class, 3);
 ```
 此代码示例创建一个int数组。 给Array.newInstance（）方法的第一个参数int.class告诉数组中每个元素应该是什么类型。 第二个参数说明数组应该有多少空间。
-###访问数组
+### 访问数组
 也可以使用Java Reflection来访问数组的元素。 这是通过Array.get（...）和Array.set（...）方法完成的。 这里是一个例子：
 ```
 int[] intArray = (int[]) Array.newInstance(int.class, 3);
@@ -21,7 +23,7 @@ System.out.println("intArray[0] = " + Array.get(intArray, 0));
 System.out.println("intArray[1] = " + Array.get(intArray, 1));
 System.out.println("intArray[2] = " + Array.get(intArray, 2));
 ```
-###获取类对象的一个数组
+### 获取类对象的一个数组
 我在Butterfly DI Container中实现脚本语言时碰到的一个问题是如何通过Java Reflection获取数组的Class对象。 使用非反射代码，你可以这样做：
 ```
 Class stringArrayClass = String[].class;
@@ -64,7 +66,7 @@ Class stringArrayClass = Array.newInstance(theClass, 0).getClass();
 Class stringArrayClass = Array.newInstance(String.class, 0).getClass();
 System.out.println("is array: " + stringArrayClass.isArray());
 ```
-###获取数组的组件类型
+### 获取数组的组件类型
 一旦获得数组的Class对象，就可以通过Class.getComponentType（）方法访问其组件类型。 组件类型是数组中项目的类型。 例如，一个int []数组的类型是int.class类对象。 String []数组的类型是java.lang.String类的对象。
 
 这是访问组件类型数组的一个例子：
@@ -77,7 +79,7 @@ System.out.println(stringArrayComponentType);
 这个例子将打印出字符串数组类型的文本“java.lang.String”。     
 
 
-###实战
+### 实战
 ```
 package com.reflection.detail;
 
@@ -138,8 +140,6 @@ is array: true
 class java.lang.String
 ```
 
-
-项目代码：[github链接](https://github.com/jiaofanting/Java-nio-and-netty-spring-demo/tree/master/src/com/reflection/detail)
 
 
 

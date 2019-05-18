@@ -1,3 +1,5 @@
+本问翻译自：http://tutorials.jenkov.com/java-servlets/index.html
+
 javax.servlet.http.HttpServlet类是比Simple Servlet示例中显示的GenericServlet稍高级的基类。
 
 HttpServlet类读取HTTP请求，并确定请求是否为HTTP GET，POST，PUT，DELETE，HEAD等，并调用一个相应的方法。

@@ -1,8 +1,10 @@
+本问翻译自：http://tutorials.jenkov.com/java-servlets/index.html
+
 ServletContext是一个获取web应用信息的对象，我们可以通过HttpRequest对象来得到它：
 ```
 ServletContext context = request.getSession().getServletContext();
 ```
-#####Context Attributes
+##### Context Attributes
 
 就像session对象一样，你可以存储一些属性在servlet容器里。
 ```

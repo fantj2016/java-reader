@@ -1,6 +1,8 @@
+本文翻译自： http://tutorials.jenkov.com/java-reflection/index.html
+
 使用Java反射，您可以在运行时访问附加到Java类的注解。
 
-###什么是Java注释？
+### 什么是Java注释？
 注释是Java 5中的一项新功能。注释是一种可以在Java代码中插入的注释或元数据。 这些注释可以在编译时通过预编译工具进行处理，也可以在运行时通过Java Reflection进行处理。 这是一个类注释的例子：
 ```
 @MyAnnotation(name="someName",  value = "Hello World")
@@ -24,7 +26,7 @@ public @interface MyAnnotation {
 @Retention（RetentionPolicy.RUNTIME）意味着注释可以在运行时通过反射来访问。 如果你没有设置这个指令，注释将不会在运行时被保留下来，因此不能通过反射来获得。
 
 @Target（ElementType.TYPE）意味着注释只能在类型（通常是类和接口）的类上使用。 您也可以指定METHOD或FIELD，或者可以将目标放在一起，以便注释可以用于类，方法和字段。
-###类注解
+### 类注解
 您可以在运行时访问类，方法或字段的注释。 以下是访问类注释的示例：
 ```
 Class aClass = TheClass.class;
@@ -49,7 +51,7 @@ if(annotation instanceof MyAnnotation){
     System.out.println("value: " + myAnnotation.value());
 }
 ```
-###方法注解
+### 方法注解
 以下是带注解的方法的示例：
 ```
 public class TheClass {
@@ -82,7 +84,7 @@ if(annotation instanceof MyAnnotation){
 }
 
 ```
-###参数注释
+### 参数注释
 也可以为方法参数声明添加注释。
 ```
 public class TheClass {
@@ -112,7 +114,7 @@ for(Annotation[] annotations : parameterAnnotations){
 }
 ```
 请注意Method.getParameterAnnotations（）方法如何返回一个二维Annotation数组，其中包含每个方法参数的注释数组。
-###字段注解
+### 字段注解
 以下是带注释的字段示例：
 ```
 public class TheClass {
@@ -146,7 +148,7 @@ if(annotation instanceof MyAnnotation){
 }
 ```
 
-###实战
+### 实战
 
 ```
 package com.reflection.detail;
@@ -185,7 +187,6 @@ value: Hello World
 
 ```
 
-项目代码：[github链接](https://github.com/jiaofanting/Java-nio-and-netty-spring-demo/tree/master/src/com/reflection/detail)
 
 
 

@@ -1,3 +1,5 @@
+本文翻译自： http://tutorials.jenkov.com/java-reflection/index.html
+
 使用Java泛型通常分为两种不同的情况:
 1. 声明一个类/接口是可参数化的。
 2. 使用可参数化的类。
@@ -16,7 +18,7 @@ List<String> myList = new ArrayList<String>();
 综上所述：只能从引用的声明（字段，参数，返回类型）中看到这些引用引用的对象所具有的通用类型。你不能从对象本身看到它。
 
 以下各节将仔细研究这些情况。
-###泛型方法返回类型
+### 泛型方法返回类型
 如果已经获得java.lang.reflect.Method对象，则可以获取有关其通用返回类型的信息。 您可以阅读如何获取文本“Java泛型：方法”中的Method对象。 下面是一个带有参数化返回类型的方法的示例类：
 ```
 public class MyClass {
@@ -45,7 +47,7 @@ if(returnType instanceof ParameterizedType){
 ```
 这段代码将打印出“typeArgClass = java.lang.String”文本。 Type []数组typeArguments数组将包含一个项目 - 一个表示java.lang.String类的Class实例。 类实现了Type接口。
 
-###泛型方法参数类型
+### 泛型方法参数类型
 您也可以通过Java Reflection在运行时访问通用类型的参数类型。 下面是一个带有参数化List作为参数的方法的示例类：
 ```
 public class MyClass {
@@ -73,7 +75,7 @@ for(Type genericParameterType : genericParameterTypes){
 }
 ```
 这段代码将打印出“parameterArgType = java.lang.String”文本。 Type []数组的parameterArgTypes数组将包含一个项 - 一个表示类java.lang.String的Class实例。 类实现了Type接口。
-###通用字段类型
+### 通用字段类型
 也可以访问通用类型的公共字段。 字段是类成员变量 - 静态或实例变量。 您可以阅读关于在文本“Java Generics：Fields”中获取Field对象的信息。 这是前面的例子，带有一个名为stringList的实例字段。
 ```
 public class MyClass {
@@ -96,7 +98,7 @@ if(genericFieldType instanceof ParameterizedType){
 ```
 这段代码将打印出“fieldArgClass = java.lang.String”文本。 Type []数组fieldArgTypes数组将包含一个项目 - 一个表示类java.lang.String的Class实例。 类实现了Type接口.
 
-###实战
+### 实战
 ```
 package com.reflection.detail;
 
@@ -137,7 +139,6 @@ java.util.List<java.lang.String>
 typeArgClass = class java.lang.String
 ```
 
-项目代码：[github链接](https://github.com/jiaofanting/Java-nio-and-netty-spring-demo/tree/master/src/com/reflection/detail)
 
 
 
