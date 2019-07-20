@@ -1,7 +1,7 @@
 
 # java-reader
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/fantj2016/java-reader/blob/master/LICENSE)
-[![微信交流群](https://img.shields.io/badge/%E5%BE%AE%E4%BF%A1%E7%BE%A4-%E4%BA%8C%E7%BB%B4%E7%A0%81-orange.svg)](https://upload-images.jianshu.io/upload_images/5786888-fa5ab6bde180e7ec.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+[![我的微信](https://img.shields.io/badge/%E5%BE%AE%E4%BF%A1%E7%BE%A4-%E4%BA%8C%E7%BB%B4%E7%A0%81-orange.svg)](https://upload-images.jianshu.io/upload_images/5786888-aceaf4a8c7d17891.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 [![微信公众号](https://img.shields.io/badge/%E5%85%AC%E4%BC%97%E5%8F%B7-PlayInJava-red.svg)](https://upload-images.jianshu.io/upload_images/5786888-fa5ab6bde180e7ec.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 
@@ -105,6 +105,10 @@
 * [CentOS命令&本地环境配置](https://github.com/fantj2016/java-reader/tree/master/RedHat-CentOS)
 
 
+### 交流群
+![QQ交流群](https://upload-images.jianshu.io/upload_images/5786888-bc946ca74be7d601.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+![微信交流群](https://upload-images.jianshu.io/upload_images/5786888-a7588ed3d33dc9bf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 ---
 
 
