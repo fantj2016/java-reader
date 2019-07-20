@@ -108,7 +108,7 @@
 ### 交流群
 ![QQ交流群](https://upload-images.jianshu.io/upload_images/5786888-bc946ca74be7d601.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-![微信交流群](https://upload-images.jianshu.io/upload_images/5786888-a7588ed3d33dc9bf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![微信交流群](https://upload-images.jianshu.io/upload_images/5786888-a7588ed3d33dc9bf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/400)
 ---
 
 
