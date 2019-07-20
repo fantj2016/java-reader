@@ -39,6 +39,7 @@
 >ArrayList、HashMap、LinkedList、ThreadPoolExector源码解析
 * [Java源码、集合源码](https://github.com/fantj2016/java-reader/tree/master/Java%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90)
 * [手写一个Tomcat](https://github.com/fantj2016/MyTomcat)
+* [手写一个Jedis](https://github.com/fantj2016/easy-jedis)
 ##### 2.2 面试题
 * [Java基础面试题总结](https://github.com/fantj2016/java-reader/tree/master/Java%E9%9D%A2%E8%AF%95)
 
@@ -80,17 +81,26 @@
 * [Maven高级](https://github.com/fantj2016/java-reader/tree/master/Maven)
 
 ---
-### 6. 大数据
-* [Hadoop、Hive、Sqoop、Flume、Azkaban、Spark服务搭建](https://github.com/fantj2016/java-reader/tree/master/Centos%E5%AE%89%E8%A3%85%E5%B7%A5%E5%85%B7%E6%96%87%E9%9B%86)
-* [Hadoop、Hive、Sqoop、Flume、Azkaban、Spark入门到实战](https://github.com/fantj2016/java-reader/tree/master/BigData)
 
-### 6. Linux运维部分
-* [CentOS安装工具集](https://github.com/fantj2016/java-reader/tree/master/Centos%E5%AE%89%E8%A3%85%E5%B7%A5%E5%85%B7%E6%96%87%E9%9B%86)
-* [CentOS命令&本地环境配置](https://github.com/fantj2016/java-reader/tree/master/RedHat-CentOS)
+### 6. Linux服务
 * [Docker从入门到使用](https://github.com/fantj2016/java-reader/tree/master/Docker)
 * [Nginx部分](https://github.com/fantj2016/java-reader/tree/master/nginx)
 * [Nginx&Keepalived实现高可用](https://github.com/fantj2016/java-reader/blob/master/nginx/Nginx%26Keepalived-%E5%AE%9E%E7%8E%B0%E9%AB%98%E5%8F%AF%E7%94%A8.md)
 * [Redis部分](https://github.com/fantj2016/java-reader/tree/master/redis)
+
+##### 6.1 进阶和面试
+* [Redis面试](https://github.com/fantj2016/java-reader/blob/master/Redis%E9%9D%A2%E8%AF%95/redis.md)
+* [Redis源码解析]()
+
+---
+### 7. 大数据
+* [Hadoop、Hive、Sqoop、Flume、Azkaban、Spark服务搭建](https://github.com/fantj2016/java-reader/tree/master/Centos%E5%AE%89%E8%A3%85%E5%B7%A5%E5%85%B7%E6%96%87%E9%9B%86)
+* [Hadoop、Hive、Sqoop、Flume、Azkaban、Spark入门到实战](https://github.com/fantj2016/java-reader/tree/master/BigData)
+
+### 8. Linux运维部分
+* [CentOS安装工具集](https://github.com/fantj2016/java-reader/tree/master/Centos%E5%AE%89%E8%A3%85%E5%B7%A5%E5%85%B7%E6%96%87%E9%9B%86)
+* [CentOS命令&本地环境配置](https://github.com/fantj2016/java-reader/tree/master/RedHat-CentOS)
+
 
 ---
 
