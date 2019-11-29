@@ -14,58 +14,59 @@
 
 ### 1. 算法
 
-* [各种排序项目代码](https://github.com/fantj2016/data-structures-with-algorithm/tree/master/main/com/algorithm/leetcode/sort)
-* [Leetcode题目解析](https://github.com/fantj2016/java-reader/tree/master/leetcode)
-* [Leetcode项目代码](https://github.com/fantj2016/data-structures-with-algorithm/tree/master/main/com/algorithm/leetcode)
-* [剑指Offer项目代码](https://github.com/fantj2016/data-structures-with-algorithm/tree/master/main/com/algorithm/offer)
-* [剑指Offer题目解析](https://github.com/fantj2016/java-reader/tree/master/%E5%89%91%E6%8C%87offer)
+* [各种排序项目代码](https://github.com/fantj2016/java-reader/tree/master/1.%20%E7%AE%97%E6%B3%95%E5%9F%BA%E7%A1%80/1.1%20%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95)
+* [Leetcode](https://github.com/fantj2016/java-reader/tree/master/1.%20%E7%AE%97%E6%B3%95%E5%9F%BA%E7%A1%80/1.3%20leetcode)
+* [剑指Offer](https://github.com/fantj2016/java-reader/tree/master/1.%20%E7%AE%97%E6%B3%95%E5%9F%BA%E7%A1%80/1.2%20%E5%89%91%E6%8C%87offer)
 
 ### 2. Java基础
 
 #### 2.1 基础篇
-* [JVM](https://github.com/fantj2016/java-reader/tree/master/JVM)
-* [Java并发、多线程](https://github.com/fantj2016/java-reader/tree/master/Java%E5%B9%B6%E5%8F%91)
-* [jvm类加载器](https://github.com/fantj2016/java-reader/tree/master/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/jvm)
-* [反射详解](https://github.com/fantj2016/java-reader/tree/master/Java-reflection-%E5%8F%8D%E5%B0%84%E8%AF%A6%E8%A7%A3)
-* [JDBC详解](https://github.com/fantj2016/java-reader/tree/master/jdbc%E7%BB%84%E4%BB%B6%E8%AF%A6%E8%A7%A3)
-* [Servlet详解](https://github.com/fantj2016/java-reader/tree/master/Java-Servlet)
-* [NIO](https://github.com/fantj2016/java-reader/tree/master/Java-NIO)
-* [Java函数式编程](https://github.com/fantj2016/java-reader/tree/master/Java%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B)
+* [JVM](https://github.com/fantj2016/java-reader/tree/master/2.%20Java%E5%9F%BA%E7%A1%80/2.1%20%E5%9F%BA%E7%A1%80%E7%AF%87/1.%20JVM%E7%AF%87)
+* [Java并发、多线程](https://github.com/fantj2016/java-reader/tree/master/2.%20Java%E5%9F%BA%E7%A1%80/2.1%20%E5%9F%BA%E7%A1%80%E7%AF%87/2.%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E7%AF%87)
+* [反射详解](https://github.com/fantj2016/java-reader/tree/master/2.%20Java%E5%9F%BA%E7%A1%80/2.1%20%E5%9F%BA%E7%A1%80%E7%AF%87/3.%20%E5%8F%8D%E5%B0%84%E7%AF%87)
+* [JDBC详解](https://github.com/fantj2016/java-reader/tree/master/2.%20Java%E5%9F%BA%E7%A1%80/2.1%20%E5%9F%BA%E7%A1%80%E7%AF%87/4.%20JDBC%E7%AF%87)
+* [Servlet详解](https://github.com/fantj2016/java-reader/tree/master/2.%20Java%E5%9F%BA%E7%A1%80/2.1%20%E5%9F%BA%E7%A1%80%E7%AF%87/5.%20Servlet%E7%AF%87)
+* [NIO](https://github.com/fantj2016/java-reader/tree/master/2.%20Java%E5%9F%BA%E7%A1%80/2.1%20%E5%9F%BA%E7%A1%80%E7%AF%87/Java-NIO)
+* [Java函数式编程](https://github.com/fantj2016/java-reader/tree/master/2.%20Java%E5%9F%BA%E7%A1%80/2.1%20%E5%9F%BA%E7%A1%80%E7%AF%87/Java%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B)
 * [设计模式代码+解读](https://github.com/fantj2016/GOF23)
-* [设计模式文章](https://github.com/fantj2016/java-reader/tree/master/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F)
-* [Tomcat类加载器]()
-* [Java手写数据结构](https://github.com/fantj2016/Java-dataStruct)
+* [设计模式文章](https://github.com/fantj2016/java-reader/tree/master/2.%20Java%E5%9F%BA%E7%A1%80/2.1%20%E5%9F%BA%E7%A1%80%E7%AF%87/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F)
+* [Tomcat类加载器(待完成)]()
 
 #### 2.2 源码篇
 
-* [Java源码、集合源码](https://github.com/fantj2016/java-reader/tree/master/Java%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90)
+* [Java源码、集合源码](https://github.com/fantj2016/java-reader/tree/master/2.%20Java%E5%9F%BA%E7%A1%80/2.2%20%E6%BA%90%E7%A0%81%E7%AF%87)
 
 #### 2.3 面试篇
-* [Java基础面试题总结](https://github.com/fantj2016/java-reader/tree/master/Java%E9%9D%A2%E8%AF%95)
+* [Java基础面试题总结](https://github.com/fantj2016/java-reader/tree/master/2.%20Java%E5%9F%BA%E7%A1%80/2.3%20%E9%9D%A2%E8%AF%95%E7%AF%87)
 
 --- 
 
 ### 3. 框架专题
 #### 3.1 实战篇
-* [SpringBoot整合&实战](https://github.com/fantj2016/java-reader/tree/master/springboot)
-* [Mybatis使用&常见问题解决](https://github.com/fantj2016/java-reader/tree/master/Mybatis)
-* [SpringSecurity安全框架实战](https://github.com/fantj2016/java-reader/tree/master/Spring-Security)
-* [SpringCloud实战](https://github.com/fantj2016/java-reader/tree/master/SpringCloud)
-* [Dubbo实战](https://github.com/fantj2016/java-reader/tree/master/dubbo)
-* [Zookeeper部分](https://github.com/fantj2016/java-reader/tree/master/zk)
-* [MQ从入门到实战](https://github.com/fantj2016/java-reader/tree/master/mq)
+* [SpringBoot整合&实战](https://github.com/fantj2016/java-reader/tree/master/3.%20%E6%A1%86%E6%9E%B6%E4%B8%93%E9%A2%98/3.1%20%E5%AE%9E%E6%88%98%E7%AF%87/SpringBoot)
+* [Mybatis使用&常见问题解决](https://github.com/fantj2016/java-reader/tree/master/3.%20%E6%A1%86%E6%9E%B6%E4%B8%93%E9%A2%98/3.1%20%E5%AE%9E%E6%88%98%E7%AF%87/Mybatis)
+* [SpringSecurity安全框架实战](https://github.com/fantj2016/java-reader/tree/master/3.%20%E6%A1%86%E6%9E%B6%E4%B8%93%E9%A2%98/3.1%20%E5%AE%9E%E6%88%98%E7%AF%87/SpringSecurity)
+* [SpringCloud实战](https://github.com/fantj2016/java-reader/tree/master/3.%20%E6%A1%86%E6%9E%B6%E4%B8%93%E9%A2%98/3.1%20%E5%AE%9E%E6%88%98%E7%AF%87/SpringCloud)
+* [Dubbo实战](https://github.com/fantj2016/java-reader/tree/master/3.%20%E6%A1%86%E6%9E%B6%E4%B8%93%E9%A2%98/3.1%20%E5%AE%9E%E6%88%98%E7%AF%87/Dubbo)
+* [Zookeeper部分](https://github.com/fantj2016/java-reader/tree/master/5.%20%E4%B8%AD%E9%97%B4%E4%BB%B6%E4%B8%93%E9%A2%98/5.1%20%E5%AE%9E%E6%88%98%E7%AF%87/3.%20Zookeeper)
+* [MQ从入门到实战](https://github.com/fantj2016/java-reader/tree/master/5.%20%E4%B8%AD%E9%97%B4%E4%BB%B6%E4%B8%93%E9%A2%98/5.1%20%E5%AE%9E%E6%88%98%E7%AF%87/4.%20MQ)
+* [JPA](https://github.com/fantj2016/java-reader/tree/master/3.%20%E6%A1%86%E6%9E%B6%E4%B8%93%E9%A2%98/3.1%20%E5%AE%9E%E6%88%98%E7%AF%87/JPA)
+* [Netty](https://github.com/fantj2016/java-reader/tree/master/3.%20%E6%A1%86%E6%9E%B6%E4%B8%93%E9%A2%98/3.1%20%E5%AE%9E%E6%88%98%E7%AF%87/Netty)
+* [Spring](https://github.com/fantj2016/java-reader/tree/master/3.%20%E6%A1%86%E6%9E%B6%E4%B8%93%E9%A2%98/3.1%20%E5%AE%9E%E6%88%98%E7%AF%87/Spring)
 
 #### 3.2 源码篇
-* [Spring源码解析](https://github.com/fantj2016/java-reader/tree/master/Spring%E6%BA%90%E7%A0%81)
-* [SpringMvc源码解析](https://github.com/fantj2016/java-reader/tree/master/SpringMvc%E6%BA%90%E7%A0%81)
-* [Mybatis源码解析](https://github.com/fantj2016/java-reader/tree/master/Mybatis%E6%BA%90%E7%A0%81)
-* [Redis源码解析](https://github.com/fantj2016/java-reader/tree/master/Redis%E6%BA%90%E7%A0%81)
-* [两种动态代理]()
+* [Spring源码解析](https://github.com/fantj2016/java-reader/tree/master/3.%20%E6%A1%86%E6%9E%B6%E4%B8%93%E9%A2%98/3.2%20%E6%BA%90%E7%A0%81%E7%AF%87/Spring%E6%BA%90%E7%A0%81)
+* [SpringBoot源码](https://github.com/fantj2016/java-reader/tree/master/3.%20%E6%A1%86%E6%9E%B6%E4%B8%93%E9%A2%98/3.2%20%E6%BA%90%E7%A0%81%E7%AF%87/SpringBoot%E6%BA%90%E7%A0%81)
+* [SpringMvc源码解析](https://github.com/fantj2016/java-reader/tree/master/3.%20%E6%A1%86%E6%9E%B6%E4%B8%93%E9%A2%98/3.2%20%E6%BA%90%E7%A0%81%E7%AF%87/SpringMVC%E6%BA%90%E7%A0%81)
+* [Mybatis源码解析](https://github.com/fantj2016/java-reader/tree/master/3.%20%E6%A1%86%E6%9E%B6%E4%B8%93%E9%A2%98/3.2%20%E6%BA%90%E7%A0%81%E7%AF%87/Mybatis%E6%BA%90%E7%A0%81)
+* [Redis源码解析](https://github.com/fantj2016/java-reader/tree/master/5.%20%E4%B8%AD%E9%97%B4%E4%BB%B6%E4%B8%93%E9%A2%98/5.2%20%E6%BA%90%E7%A0%81%E7%AF%87/Redis%E6%BA%90%E7%A0%81)
+* [Dubbo源码](https://github.com/fantj2016/java-reader/tree/master/3.%20%E6%A1%86%E6%9E%B6%E4%B8%93%E9%A2%98/3.2%20%E6%BA%90%E7%A0%81%E7%AF%87/Dubbo%E6%BA%90%E7%A0%81)
+
 
 #### 3.3 面试题
-* [Spring面试题]()
-* [SpringMvc面试题]()
-* [Mybatis面试题]()
+* [Spring面试题(待完成)]()
+* [SpringMvc面试题(待完成)]()
+* [Mybatis面试题(待完成)]()
 * [Redis面试](https://github.com/fantj2016/java-reader/blob/master/Redis%E9%9D%A2%E8%AF%95/redis.md)
 
 
@@ -76,7 +77,7 @@
 ---
 
 ### 4. 分布式专题
-* [分布式事务](https://github.com/fantj2016/java-reader/tree/master/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1)
+* [分布式事务](https://github.com/fantj2016/java-reader/tree/master/4.%20%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%93%E9%A2%98/4.1%20%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1)
 * 分布式锁..待更新
 
 ##### 4.1 分布式面试题
@@ -84,37 +85,44 @@
 ---
 ### 5. 中间件专题
 
-* [Nginx入门](https://github.com/fantj2016/java-reader/tree/master/nginx)
-* [Redis入门](https://github.com/fantj2016/java-reader/tree/master/redis)
-* [Zookeeper部分](https://github.com/fantj2016/java-reader/tree/master/zk)
-* [MQ从入门到实战](https://github.com/fantj2016/java-reader/tree/master/mq)
+#### 5.1 实战篇
+* [Nginx入门](https://github.com/fantj2016/java-reader/tree/master/5.%20%E4%B8%AD%E9%97%B4%E4%BB%B6%E4%B8%93%E9%A2%98/5.1%20%E5%AE%9E%E6%88%98%E7%AF%87/1.%20Nginx)
+* [Redis入门](https://github.com/fantj2016/java-reader/tree/master/5.%20%E4%B8%AD%E9%97%B4%E4%BB%B6%E4%B8%93%E9%A2%98/5.1%20%E5%AE%9E%E6%88%98%E7%AF%87/2.%20Redis)
+* [Zookeeper部分](https://github.com/fantj2016/java-reader/tree/master/5.%20%E4%B8%AD%E9%97%B4%E4%BB%B6%E4%B8%93%E9%A2%98/5.1%20%E5%AE%9E%E6%88%98%E7%AF%87/3.%20Zookeeper)
+* [MQ从入门到实战](https://github.com/fantj2016/java-reader/tree/master/5.%20%E4%B8%AD%E9%97%B4%E4%BB%B6%E4%B8%93%E9%A2%98/5.1%20%E5%AE%9E%E6%88%98%E7%AF%87/4.%20MQ)
 
-### 6. 常用研发工具
-* [Git使用&问题排查](https://github.com/fantj2016/java-reader/tree/master/Git)
-* [Maven高级](https://github.com/fantj2016/java-reader/tree/master/Maven)
+#### 5.2 源码篇
+* [Redis源码分析](https://github.com/fantj2016/java-reader/tree/master/5.%20%E4%B8%AD%E9%97%B4%E4%BB%B6%E4%B8%93%E9%A2%98/5.2%20%E6%BA%90%E7%A0%81%E7%AF%87/Redis%E6%BA%90%E7%A0%81)
 
+### 6. 高效研发
+* [Git使用&问题排查](https://github.com/fantj2016/java-reader/tree/master/6.%20%E9%AB%98%E6%95%88%E5%BC%80%E5%8F%91/6.1%20Git)
+* [Maven高级](https://github.com/fantj2016/java-reader/tree/master/6.%20%E9%AB%98%E6%95%88%E5%BC%80%E5%8F%91/6.2%20Maven)
+* [Jenkins使用](https://github.com/fantj2016/java-reader/tree/master/6.%20%E9%AB%98%E6%95%88%E5%BC%80%E5%8F%91/6.3%20Jenkins)
+* [IDEA使用](https://github.com/fantj2016/java-reader/tree/master/6.%20%E9%AB%98%E6%95%88%E5%BC%80%E5%8F%91/6.4%20IDEA)
 ---
 
 ### 7. Linux专题
 
 #### 7.1 基础
-* [CentOS命令&本地环境配置](https://github.com/fantj2016/java-reader/tree/master/RedHat-CentOS)
+* [CentOS命令&系统配置](https://github.com/fantj2016/java-reader/tree/master/7.%20Linux%E4%B8%93%E9%A2%98/7.1%20%E5%9F%BA%E7%A1%80%E7%AF%87)
 
 #### 7.2 常用服务搭建
-
-* [CentOS安装工具集](https://github.com/fantj2016/java-reader/tree/master/Centos%E5%AE%89%E8%A3%85%E5%B7%A5%E5%85%B7%E6%96%87%E9%9B%86)
-* [Docker从入门到使用](https://github.com/fantj2016/java-reader/tree/master/Docker)
-* [Nginx搭建入门](https://github.com/fantj2016/java-reader/tree/master/nginx)
-* [Nginx&Keepalived实现高可用](https://github.com/fantj2016/java-reader/blob/master/nginx/Nginx%26Keepalived-%E5%AE%9E%E7%8E%B0%E9%AB%98%E5%8F%AF%E7%94%A8.md)
-* [Redis搭建](https://github.com/fantj2016/java-reader/tree/master/redis)
+* [常用服务搭建:Hadoop+Redis+Es+FTP...](https://github.com/fantj2016/java-reader/tree/master/7.%20Linux%E4%B8%93%E9%A2%98/7.2%20%E5%B8%B8%E7%94%A8%E6%9C%8D%E5%8A%A1%E6%90%AD%E5%BB%BA)
+* [Docker从入门到使用](https://github.com/fantj2016/java-reader/tree/master/7.%20Linux%E4%B8%93%E9%A2%98/7.2%20%E5%B8%B8%E7%94%A8%E6%9C%8D%E5%8A%A1%E6%90%AD%E5%BB%BA/Docker)
+* [Docker-compose](https://github.com/fantj2016/java-reader/tree/master/7.%20Linux%E4%B8%93%E9%A2%98/7.2%20%E5%B8%B8%E7%94%A8%E6%9C%8D%E5%8A%A1%E6%90%AD%E5%BB%BA/Docker-compose)
+* [Shell脚本](https://github.com/fantj2016/java-reader/tree/master/7.%20Linux%E4%B8%93%E9%A2%98/Shell)
 
 
 ---
 ### 8. 大数据
-* [Hadoop、Hive、Sqoop、Flume、Azkaban、Spark服务搭建](https://github.com/fantj2016/java-reader/tree/master/Centos%E5%AE%89%E8%A3%85%E5%B7%A5%E5%85%B7%E6%96%87%E9%9B%86)
-* [Hadoop、Hive、Sqoop、Flume、Azkaban、Spark入门实战](https://github.com/fantj2016/java-reader/tree/master/BigData)
+* [服务搭建篇](https://github.com/fantj2016/java-reader/tree/master/8.%20%E5%A4%A7%E6%95%B0%E6%8D%AE/8.1%20%E6%9C%8D%E5%8A%A1%E6%90%AD%E5%BB%BA%E7%AF%87)
+* [实战篇](https://github.com/fantj2016/java-reader/tree/master/8.%20%E5%A4%A7%E6%95%B0%E6%8D%AE/8.2%20%E5%AE%9E%E6%88%98%E7%AF%87)
 
+### 9. 架构设计
+* [架构设计篇](https://github.com/fantj2016/java-reader/tree/master/9.%20%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1)
 
+### HR面经验
+* [HR面技巧](https://github.com/fantj2016/java-reader/tree/master/HR%E9%9D%A2%E8%AF%95%E6%8A%80%E5%B7%A7)
 
 ### 公众号
 ![我的公众号](https://upload-images.jianshu.io/upload_images/5786888-74bca7fff151cfb8.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/500)
