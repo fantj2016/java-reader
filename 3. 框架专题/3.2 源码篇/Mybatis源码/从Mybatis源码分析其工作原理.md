@@ -1,6 +1,6 @@
->Mybatis工作原理也是面试的一大考点，必须要对其非常清晰，这样才能怼回去。本文建立在Spring+SpringMVC+Mybatis整合的项目之上。
+>Mybatis将sql与代码分离、将查询的结果集与java对象自动映射, 大大方便了研发人员的开发和维护成本, 那它是如何做到的呢?
 
-我将其工作原理分为六个部分：
+我将其工作流程分为六个部分：
 1. 读取核心配置文件并返回`InputStream`流对象。
 2. 根据`InputStream`流对象解析出`Configuration`对象，然后创建`SqlSessionFactory`工厂对象
 3. 根据一系列属性从`SqlSessionFactory`工厂中创建`SqlSession`
@@ -8,6 +8,7 @@
 5. 对执行结果进行二次封装
 6. 提交与事务
 
+接下来一步步跟进看下源码：
 
 先给大家看看我的实体类:
 ```
@@ -117,7 +118,7 @@ public static InputStream getResourceAsStream(ClassLoader loader, String resourc
     }
 }
 ```
-获取到自身的ClassLoader对象，然后交给ClassLoader(lang包下的)来加载:
+交给ClassLoader来加载, 如果classLoader为null, 则去"/" + resource 路径下装载流:
 ```
 InputStream getResourceAsStream(String resource, ClassLoader[] classLoader) {
     ClassLoader[] arr$ = classLoader;
@@ -152,6 +153,10 @@ public SqlSessionFactory build(InputStream inputStream) {
 }
 ```
 这里要传入一个inputStream对象，就是将我们上一步获取到的InputStream对象传入。
+
+>InputStream里面有什么数据呢?
+
+jdbc信息、和关联mapper.xml(BookMapper.xml)
 ```
 public SqlSessionFactory build(InputStream inputStream, String environment, Properties properties) {
     SqlSessionFactory var5;
@@ -175,7 +180,7 @@ public SqlSessionFactory build(InputStream inputStream, String environment, Prop
     return var5;
 }
 ```
-如何解析的就大概说下，通过`Document`对象来解析，然后返回`InputStream`对象，然后交给`XMLConfigBuilder`构造成`org.apache.ibatis.session.Configuration`对象，然后交给build()方法构造程SqlSessionFactory：
+可以看到, XMLConfigBuilder对象对输入流进行了解析, 如何解析的就大概说下，通过`Document`对象来解析，然后返回`InputStream`对象，然后交给`XMLConfigBuilder`构造成`org.apache.ibatis.session.Configuration`对象，然后交给build()方法构造程SqlSessionFactory：
 ```
 public SqlSessionFactory build(Configuration config) {
     return new DefaultSqlSessionFactory(config);
@@ -356,6 +361,8 @@ public void setParameters(PreparedStatement ps) {
 ```
 
 ### 5. 对查询结果二次封装
+>为什么要二次封装, 因为要将数据库返回数据转换成java对象类型。
+
 >在doUpdate方法中，解析生成完新的SQL后，然后执行var6 = handler.update(stmt);我们来看看它的源码。
 
 ```
@@ -376,6 +383,8 @@ public int update(Statement statement) throws SQLException {
 如果是query操作，返回的是一个ResultSet，mybatis将查询结果包装程`ResultSetWrapper`类型，然后一步步对应java类型赋值等...有兴趣的可以自己去看看。
 
 ### 6. 提交与事务
+>mybatis的事务也是基于jdbc做的, 不了解jdbc事务可以去补一下这一块的知识。
+
 >最后，来看看commit()方法的源码。
 
 
@@ -427,6 +436,8 @@ public void commit(boolean required) throws SQLException {
 }
 ```
 最后调用JDBCTransaction的commit方法：
+> 注意这里的this.connection, 保证了jdbc的同一个连接下的操作(同一次对话中完成事务)。这里面还是大有学问的, 有兴趣的可以继续钻研, 我的理解是开启连接依赖于java提供的javax.sql.DataSource对象, 然后后续是将这个connect对象一直持有着的直到销毁连接。
+
 ```
 public void commit() throws SQLException {
     if (this.connection != null && !this.connection.getAutoCommit()) {
