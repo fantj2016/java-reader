@@ -1,11 +1,10 @@
 ### 低延迟垃圾收集器
 
-
 > Shenandoah和ZGC为什么被称为低延迟GC，因为它几乎整个工作过程全部都是并发的，只有初始标记、最终标记这些阶段有短暂的停顿，这部分停顿的时间基本上是固定的，与堆的容量、堆中对象的数量没有正比例关系。实际上，它们都可以在任意可管理的（譬如现在ZGC只能管理4TB以内的堆）堆容量下，实现垃圾收集的停顿都不超过十毫秒这种以前听起来是天方夜谭、匪夷所思的目标。这两款目前仍处于实验状态的收集器，被官方命名为“低延迟垃圾收集器”。
 
 衡量垃圾收集器的三项最重要的指标是：内存占用（Footprint）、吞吐量（Throughput）和延迟（Latency），三者共同构成了一个“不可能三角”。
 
-#### 1\. Shenandoah垃圾回收器
+### 1\. Shenandoah垃圾回收器
 
 > 比起稍后要介绍的有着Oracle正朔血统的ZGC，Shenandoah反而更像是G1的下一代继承者。使用转发指针（Forwarding Pointer，也常被称为Indirection Pointer）来实现对象移动与用户程序并发的一种解决方案。
 
@@ -37,15 +36,15 @@
 
 2016年做该测试时的Shenandoah并没有完全达成预定目标，停顿时间比其他几款收集器确实有了质的飞跃，但也并未实现最大停顿时间控制在十毫秒以内的目标，而吞吐量方面则出现了很明显的下降。
 
-![](https://upload-images.jianshu.io/upload_images/5786888-f51d95d456558223.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240) 
+![](https://user-gold-cdn.xitu.io/2020/1/11/16f931defeabda94?w=1240&h=262&f=png&s=110126) 
 
 Shenandoah的性能在日益改善，逐步接近“Low-Pause”的目标。此外，RedHat也积极拓展Shenandoah的使用范围，将其Backport到JDK 11甚至是JDK 8之上，让更多不方便升级JDK版本的应用也能够享受到垃圾收集器技术发展的最前沿成果。
 
-### ZGC收集器
+### 2. ZGC收集器
 
 > ZGC是一款在JDK 11中新加入的具有实验性质[插图]的低延迟垃圾收集器，是由Oracle公司研发的。2018年Oracle创建了JEP 333将ZGC提交给OpenJDK，推动其进入OpenJDK 11的发布清单之中。
 
-ZGC和Shenandoah的目标是高度相似的，都希望在尽可能对吞吐量影响不太大的前提下[插图]，实现在任意堆内存大小下都可以把垃圾收集的停顿时间限制在十毫秒以内的低延迟。但是ZGC和Shenandoah的实现思路又是差异显著的。
+ZGC和Shenandoah的目标是高度相似的，都希望在尽可能对吞吐量影响不太大的前提下，实现在任意堆内存大小下都可以把垃圾收集的停顿时间限制在十毫秒以内的低延迟。但是ZGC和Shenandoah的实现思路又是差异显著的。
 
 ZGC收集器是一款基于Region内存布局的，（暂时）不设分代的，使用了读屏障、染色指针和内存多重映射等技术来实现可并发的标记-整理算法的，以低延迟为首要目标的一款垃圾收集器。
 
@@ -57,7 +56,7 @@ ZGC收集器有一个标志性的设计是它采用的染色指针技术（Color
 
 由于这些标志位进一步压缩了原本就只有46位的地址空间，也直接导致ZGC能够管理的内存不可以超过4TB（2的42次幂）。
 
-![](https://upload-images.jianshu.io/upload_images/5786888-58916fce9d440287.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240) 
+![](https://user-gold-cdn.xitu.io/2020/1/11/16f931df02d6c256?w=1073&h=289&f=png&s=115259) 
 
 ##### 染色指针的三大优势：
 
@@ -71,7 +70,7 @@ ZGC收集器有一个标志性的设计是它采用的染色指针技术（Color
 
 这里面的解决方案要涉及虚拟内存映射技术。把染色指针中的标志位看作是地址的分段符，那只要将这些不同的地址段都映射到同一个物理内存空间，经过多重映射转换后，就可以使用染色指针正常进行寻址了。
 
-![image](https://upload-images.jianshu.io/upload_images/5786888-14ec37bc4ecbded5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240) 
+![image](https://user-gold-cdn.xitu.io/2020/1/11/16f931df01f9c7ed?w=1074&h=446&f=png&s=283314) 
 
 ##### ZGC的运作过程大致可划分为以下四个大的阶段
 
@@ -93,9 +92,22 @@ ZGC收集器有一个标志性的设计是它采用的染色指针技术（Color
 
 4.  ZGC均能毫不费劲地控制在十毫秒之内
 
-![image](https://upload-images.jianshu.io/upload_images/5786888-469dcb2b10697ab9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240) 
+![image](https://user-gold-cdn.xitu.io/2020/1/11/16f931df3d56bb0a?w=1063&h=708&f=png&s=195145) 
 
-![image](https://upload-images.jianshu.io/upload_images/5786888-0ce1a091df911e32.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image](https://user-gold-cdn.xitu.io/2020/1/11/16f931dfb1f140d1?w=1068&h=555&f=png&s=163271)
 
 
 声明：本问参考书籍《深入理解Java虚拟机：JVM高级特性与最佳实践（第3版） 》，这个版本刚上市两个月，新增了一些新的GC和内存分配策略的知识，大伙有兴趣可以看看。若有侵权,请联系删除,谢谢!
+
+
+---
+
+---
+如果你喜欢我的文章，那麻烦请关注我的公众号，该公众号还处于初始阶段，谢谢大家的支持。
+![](https://user-gold-cdn.xitu.io/2019/12/3/16ecadc23e4f9bc3?w=258&h=258&f=jpeg&s=26754)
+关注公众号，回复`java架构`获取架构视频资源(后期还会分享不同的优质资源噢)。回复`找对象`可以拉你进IT单身交友群噢。
+
+想看往期文章, 请点击我的GitHub地址: https://github.com/fantj2016/java-reader
+
+---
+---
