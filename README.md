@@ -12,6 +12,11 @@
 
 参考书籍: 《深入理解Java虚拟机》、《并发编程的艺术》、《Java多线程核心编程艺术》、《Java8函数式编程》、《Redis设计与实现》、《RocketMQ技术内幕》、《Spring技术内幕》、《Spring源码深度解析》、《剑指Offer》、《大话设计模式》... 
 
+我的简书：https://www.jianshu.com/u/f223a6ff7f2a
+
+我的掘金：https://juejin.im/user/5a6adbdb6fb9a01ca6030469
+
+
 ### 1. 算法
 
 * [各种排序项目代码](https://github.com/fantj2016/java-reader/tree/master/1.%20%E7%AE%97%E6%B3%95%E5%9F%BA%E7%A1%80/1.1%20%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95)
