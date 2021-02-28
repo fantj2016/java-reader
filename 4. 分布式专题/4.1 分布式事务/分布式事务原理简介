@@ -1,0 +1,293 @@
+# 1. 单数据源事务实现
+
+工作上，对于只有一个数据源的操作中，我们仅仅用@Transaction 注解即可实现多个操作的事务控制。这个注解是spring提供的，与此同时，spring提供了多种事务管理器，有相应的依赖就会自动完成配置，我们使用的时候，只需要将我们想要的事务实现对象注入到 PlatformTransactionManager 里，就可以实现多种事务控制，也可以自己遵循spring的事务管理接口规范，自己写一个事务实现并注入：
+
+![image.png](https://upload-images.jianshu.io/upload_images/5786888-d4c40b7d02d3670e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+
+spring是如何自动识别并装配事务呢。以jdbc事务为例：
+#### 扩展：jdbc事务自动配置
+```
+@Configuration
+@ConditionalOnClass({ JdbcTemplate.class, PlatformTransactionManager.class })
+@AutoConfigureOrder(Ordered.LOWEST_PRECEDENCE)
+@EnableConfigurationProperties(DataSourceProperties.class)
+public class DataSourceTransactionManagerAutoConfiguration {
+
+	@Configuration
+	@ConditionalOnSingleCandidate(DataSource.class)
+	static class DataSourceTransactionManagerConfiguration {
+
+		private final DataSource dataSource;
+
+		private final TransactionManagerCustomizers transactionManagerCustomizers;
+
+		DataSourceTransactionManagerConfiguration(DataSource dataSource,
+				ObjectProvider<TransactionManagerCustomizers> transactionManagerCustomizers) {
+			this.dataSource = dataSource;
+			this.transactionManagerCustomizers = transactionManagerCustomizers
+					.getIfAvailable();
+		}
+
+		@Bean
+		@ConditionalOnMissingBean(PlatformTransactionManager.class)
+		public DataSourceTransactionManager transactionManager(
+				DataSourceProperties properties) {
+			DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(
+					this.dataSource);
+			if (this.transactionManagerCustomizers != null) {
+				this.transactionManagerCustomizers.customize(transactionManager);
+			}
+			return transactionManager;
+		}
+
+	}
+
+}
+```
+@AutoConfigureOrder这个注解是springboot的新特性， 它修饰的类可以在容器启动的时候被spring扫描并配置注入。再加上@Conditional 家族的组合拳，使得jdbc的DataSourceTransactionManager 事务管理可以注入到IOC容器。其他的数据源也类似。
+
+
+#### 1.1 spring单机事务实战
+
+声明式事务：@Transactional 一个注解就好了, spring通过切面来实现事务控制。
+
+编程式事务：
+
+```
+public void transferAccount() { 
+         Connection conn = null; 
+         Statement stmt = null; 
+         try{ 
+             conn = getDataSource().getConnection(); 
+             // 将自动提交设置为 false，
+             //若设置为 true 则数据库将会把每一次数据更新认定为一个事务并自动提交
+             conn.setAutoCommit(false);
+
+             stmt = conn.createStatement(); 
+             // 将 A 账户中的金额减少 500 
+             stmt.execute("\
+             update t_account set amount = amount - 500 where account_id = 'A'");
+             // 将 B 账户中的金额增加 500 
+             stmt.execute("\
+             update t_account set amount = amount + 500 where account_id = 'B'");
+
+             // 提交事务
+             conn.commit();
+             // 事务提交：转账的两步操作同时成功
+         } catch(SQLException sqle){            
+             try{ 
+                 // 发生异常，回滚在本事务中的操作
+                conn.rollback();
+                 // 事务回滚：转账的两步操作完全撤销
+                 stmt.close(); 
+                 conn.close(); 
+             }catch(Exception ignore){ 
+
+             } 
+             sqle.printStackTrace(); 
+         } 
+     }
+```
+上面的两种方式，大家应该是再熟悉不过了，编程式事务就是声明式事务的源码。在编程式事务中可以看到，`conn = getDataSource().getConnection(); `会在执行sql前调用，这个就是用来获取jdbc链接的，思考一下如果我开多个线程去调用它内存地址会是一样的吗，大家可以在代码里面试试。那为什么会不一样呢，结合mysql事务机制仔细想一下，相信你一定题录灌顶。
+
+
+#### 思考：单数据源事务的关键是同一连接，spring是如何保证的
+
+> 我们知道，mysql不能用两个黑框连接来实现同一个事务，假如有多个sql操作，分别操作同库中不同的表，要完成这个事务，必须要保证这些操作在同一个sql连接中，spring是如何做的呢。
+
+以JDBC驱动为例，JDBC的dataSource连接是通过org.springframework.jdbc.datasource.DataSourceUtils来获取，在DataSourceUtils获取连接的时候，会将Connection和当前线程做绑定（调用TransactionSynchronizationManager的bindResource(dataSource, holderToUse);方法），在获取连接时，从ThreadLocal中拿到对应的Connection（TransactionSynchronizationManager中提供 getResource方法），然后在同一连接下继续执行事务。
+
+
+#### 哪些场景不应该用普通事务
+
+> 当容器内存在多个数据源时，如果一个应用容器中存在多个不同的数据源,通常我们会创建多个数据源的事务管理器.
+
+比如一个Java应用要连数据库,同时也要连接MQ,这种情况下进行事务管理,我们就会创建一个DataSourceTransactionManager和一个JMSTransactionManager分别来对数据库事务和MQ事务进行管理.
+
+在一次请求服务的过程中使用到了2个数据源,那么事务的处理可能是这样的流程:
+
+```
+// 进行如下操作
+1. start message transaction
+2. receive message
+3. start database transaction
+4. update database
+5. commit database transaction
+// 我出错了
+6. commit messaging transaction
+```
+
+在第5步和第6步之间如果出现了异常,那么由于第5步已经提交了,不能进行回滚操作,数据库已经插入了,但是消息还没有被消费掉,这样就无法满足事务的一致性了.所以就需要用分布式事务来保证其一致性。
+
+
+# 2. 分布式事务
+
+> 跨数据源的事务。
+
+### 2.1 XA协议简介
+
+XA是由X/Open组织提出的分布式事务的架构（或者叫协议），是一种通用的规范。XA规范的基础是两阶段提交协议（2PC）。Oracle, Sybase, DB2, SQL Server等大型数据库支持XA。
+
+XA协议内容是对底层事务资源的抽象，定义了分布式事务处理过程中事务管理器和资源管理器之间的协议，各事务资源提供商（如 JDBC 驱动，JMS）将提供此接口的实现。使用此接口，开发人员可以通过自己的编程实现分布式事务处理，但这些通常都是由应用服务器实现的（服务器自带实现更加高效，稳定）
+
+Mysql也有XA的实现，获取了一个普通的链接Connection之后，封装成了MysqlXAConnection
+
+#### XA常见问题
+##### XA二阶段提交
+
+1. 性能问题
+XA协议遵循强一致性。在事务执行过程中，各个节点占用着数据库资源，只有当所有节点准备完毕，事务协调者才会通知提交，参与者提交后释放资源。这样的过程有着非常明显的性能问题。
+
+2. 协调者单点故障问题
+事务协调者是整个XA模型的核心，一旦事务协调者节点挂掉，参与者收不到提交或是回滚通知，参与者会一直处于中间状态无法完成事务。
+
+3. 丢失消息导致的不一致问题。
+在XA协议的第二个阶段，如果发生局部网络问题，一部分事务参与者收到了提交消息，另一部分事务参与者没收到提交消息，那么就导致了节点之间数据的不一致。
+
+##### XA三阶段提交
+XA三阶段提交在两阶段提交的基础上增加了CanCommit阶段，并且引入了超时机制。一旦事物参与者迟迟没有接到协调者的commit请求，会自动进行本地commit。这样有效解决了协调者单点故障的问题。但是性能问题和不一致的问题仍然没有根本解决。
+
+### 2.2 JTA事务介绍
+
+Java 事务编程接口（JTA：Java Transaction API），是J2EE的编程接口规范，它是XA协议的JAVA实现。
+
+```
+public void transferAccount() { 
+        UserTransaction userTx = null; 
+        try{ 
+            // 获得 Transaction 管理对象
+            userTx = (UserTransaction)getContext().lookup("\
+                  java:comp/UserTransaction"); 
+            // 启动事务
+            userTx.begin();
+            // 将 A 账户中的金额减少 500 
+            stmtA.execute(sql1);  
+            // 将 B 账户中的金额增加 500 
+            stmtB.execute(sql2);
+            // 提交事务
+            userTx.commit();
+            // 事务提交：转账的两步操作同时成功（数据库 A 和数据库 B 中的数据被同时更新）
+        } catch(SQLException sqle){         
+                 // 发生异常，回滚在本事务中的操纵
+                 userTx.rollback();
+                // 事务回滚：转账的两步操作完全撤销 
+                //( 数据库 A 和数据库 B 中的数据更新被同时撤销）
+        } catch(Exception ne){ 
+            e.printStackTrace(); 
+        } 
+    }
+```
+
+面向开发人员的接口为 UserTransaction：
+
+
+* begin() – 开始一个分布式事务，（在后台 TransactionManager 会创建一个 Transaction 事务对象并把此对象通过 ThreadLocale 关联到当前线程上 )
+* commit() – 提交事务（在后台 TransactionManager 会从当前线程下取出事务对象并把此对象所代表的事务提交）
+* rollback() – 回滚事务（在后台 TransactionManager 会从当前线程下取出事务对象并把此对象所代表的事务回滚）
+* getStatus() – 返回关联到当前线程的分布式事务的状态 (Status 对象里边定义了所有的事务状态，感兴趣的读者可以参考 API 文档 )
+* setRollbackOnly() – 标识关联到当前线程的分布式事务将被回滚
+
+
+UserTransaction是对Transaction接口的扩展，上面的这些操作最终都会落到真正的Transaction上来实现commit和rollback，这里的Transaction 操作的就是实现了XA协议的数据源。
+
+不同的是，JTA的连接管理是通过TransactionManager 来实现，调用 UserTransaction.begin() 方法时 TransactionManager 会创建一个 Transaction 事务对象并把此对象通过 ThreadLocale 关联到当前线程上
+
+#### 思考：如何记录同一个切面下 不同事务 属于同一个分布式事务呢？
+
+支持事务的数据源与普通的数据源是不同的，它实现了额外的 XADataSource 接口。
+
+![image.png](https://upload-images.jianshu.io/upload_images/5786888-d2bb5fa2960a8404.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+
+Xid 类用来标识事务，可以把 Xid 想象成事务的一个标志符，每次在新事务创建是都会为事务分配一个 Xid，Xid 包含三个元素：formatID、gtrid（全局事务标识符）和 bqual（分支修饰词标识符）。 formatID 通常是零，这意味着你将使用 OSI CCR（Open Systems Interconnection Commitment, Concurrency 和 Recovery 标准）来命名；如果你要使用另外一种格式，那么 formatID 应该大于零，-1 值意味着 Xid 为无效。gtrid 和 bqual 分别包含 64 个字节二进制码来分别标识全局事务和分支事务， gtrid 和 bqual 必须是全局唯一的。
+
+在事务被提交时，Transaction 对象会收集所有被当前事务包含的 XAResource 资源，然后调用资源的提交方法，如果有失败就全部rollback。
+
+JTA一般和Atomikos框架配合使用
+
+### 2.3 TCC事务介绍
+
+> 是基于补偿型事务的AP系统的一种实现, 具有最终一致性。原理是2PC两阶段提交。
+
+TCC（Try/Confirm/Cancel）事务机制相对于传统事务机制（X/Open XA），其特征在于它不依赖资源管理器(RM)对XA的支持，而是通过对（由业务系统提供的）业务逻辑的调度来实现分布式事务。
+
+国内开源的TCC框架：ByteTCC、Himly、TCC-transaction
+
+##### TCC原理图：
+
+![image.png](https://upload-images.jianshu.io/upload_images/5786888-7ef17ab1538782a0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+TCC是2PC的思想在应用层面的落地实现，使用TCC实现事务，需要每个接口中都有try、Confirm、Cancel接口，并保证这三个接口的幂等性。需要开发很大量的代码，花费很高的成本，一般不会使用它。
+
+##### TCC优缺点
+优点：可以让应用自己定义数据操作的粒度，使得降低锁冲突、提高吞吐量成为可能。
+缺点：对应用的侵入性非常强，业务逻辑的每个分支都需要实现try、confirm、cancel三个操作。此外，其实现难度也比较大，需要按照网络状态、系统故障等不同的失败原因实现不同的回滚策略。Confirm/Cancel业务可能会被多次调用，就需要保障其幂等性。
+
+TCC故障处理：[https://blog.csdn.net/dm_vincent/article/details/92432059](https://blog.csdn.net/dm_vincent/article/details/92432059)
+
+### 2.4 LCN事务框架
+
+> LCN分布式事务框架其本身并不创建事务，而是基于对本地事务的协调从而达到事务一致性的效果。
+
+LCN有三种模式：LCN模式，TCC模式，TXC模式。TCC模式上面有说，这里介绍LCN模式。
+
+##### 使用方式：
+多数据源配置 + 多数据源实例注入到LCN事务管理器中，后续即可通过@LcnTransaction 注解来实现。
+
+事务流程图：
+
+![image.png](https://upload-images.jianshu.io/upload_images/5786888-a16cb14618965f66.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+
+TxManager本身是一个Socket服务，来处理每个事务传递过来的指令。同一个事物组中都成功后会返回成功，有一个事务失败后会返回给所有的事务rollback。
+
+整个事务在一个切面里面，切面里面会生成一个事务组id，将各个事务绑定，并上传各个事务的结果：commit 还是rollback。
+
+##### 事务管理如何做到等待全部事务的结果呢？
+
+每个事务提交会附带一个锁对象，事务管理新开辟线程来锁住该对象，等本地事务状态达到终态后将锁进行释放，事务管理就会收到事务的结果。
+
+LCN事务本地事务是一定要保持在同一个线程内完成，如何保证的呢？ThreadLocal，在获取dataSource连接&创建事务的时候，在threadLocal中存放一份事务对象
+
+##### 优缺点
+
+优点：性能优秀；对代码的嵌入性低；该模式仅限于本地存在连接对象且可通过连接对象控制事务的模块。
+
+缺点：需额外部署 tx-manager 服务节点；代理的连接需要随事务发起方一共释放连接，增加了连接占用的时间; 服务超时时，会造成其他服务的资源被锁住，比如支付服务超时过程中，相关商品库存会一直无法操作;
+
+### seata框架（GTS开源版本）
+
+官网：http://seata.io/zh-cn/
+文档：http://seata.io/zh-cn/docs/overview/what-is-seata.html
+
+GTS文档：https://www.jianshu.com/p/65b7fd061a33
+
+### 2.5 消息驱动事务
+
+> 基于消息中间件的最终一致性事务方案是互联网公司在高并发场景中探索出的一种创新型应用模式。
+
+消息一致性方案是通过消息中间件保证上、下游应用数据操作的一致性。基本思路是将本地操作和发送消息放在一个事务中，保证本地操作和消息发送要么两者都成功或者都失败。下游应用向消息系统订阅该消息，收到消息后执行相应操作。
+
+![image.png](https://upload-images.jianshu.io/upload_images/5786888-4f13ec2482fa7ae1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+消息方案从本质上讲是将分布式事务转换为两个本地事务，然后依靠下游业务的重试机制达到最终一致性。基于消息的最终一致性方案对应用侵入性也很高，应用需要进行大量业务改造，成本较高。由于会出现网络延迟的问题，消息重复、消息顺序无法保证的情况也会出现。需要业务机制进行补偿。
+
+#### 扩展：dataSource连接 Connection 接口会有commit和rollback方法，它如何实现提交和回滚操作的？
+
+通过sockcet和mysql进行的指令交互，真正实现靠mysql的事务管理。undo、redo日志实现。[https://www.cnblogs.com/wyc1994666/p/11367051.html](https://www.cnblogs.com/wyc1994666/p/11367051.html)
+
+
+### 事务的适用场景
+>分布式事务，按照控制力度可以分为：不控制、部分控制和完全控制。
+
+* 不控制就是不引入分布式事务。
+* 部分控制就是引入了分布式事务，但数据不是强一致性，比如TCC和消息驱动事务，它的优点是并发量和性能很好。适用于一些不要求时效性和一致性的场景。比如：交易成功发短息、推送消息等
+* 完全控制保证了数据的强一致性，比如LCN、GTS，这种事务牺牲了性能，保障了数据的一致性。适用于要求时效性和一致性的场景，比如金融支付，共享出行等。
+
+
+### 工作上能到用哪些
+目前我们大多数场景使用的是消息驱动的事务模型，确保数据最终一致性即可，金融、库存服务对数据强一致性要求较高，所以对事务的强一致性要求也较高，不适合用消息驱动的事务模型。这些不同的思想的学习，可以为我们后续的工作添加一份思路。
+
+1. 学习spring事务管理接口定义的设计模式，在需求开发中提高功能的可扩展性。
+2. 对需要同一线程处理的资源，可以模拟TransactionSynchronizationManager 的思路，用ThreadLocal实现。使用时注意ThreadLocal的内存泄漏问题。
