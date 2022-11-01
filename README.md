@@ -29,7 +29,7 @@
 
 ### 2. Java基础
 
-#### 2.1 基础篇
+#### 2.1 基础
 * [JVM](https://github.com/fantj2016/java-reader/tree/master/2.%20Java%E5%9F%BA%E7%A1%80/2.1%20%E5%9F%BA%E7%A1%80%E7%AF%87/1.%20JVM%E7%AF%87)
 * [Java并发、多线程](https://github.com/fantj2016/java-reader/tree/master/2.%20Java%E5%9F%BA%E7%A1%80/2.1%20%E5%9F%BA%E7%A1%80%E7%AF%87/2.%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E7%AF%87)
 * [反射详解](https://github.com/fantj2016/java-reader/tree/master/2.%20Java%E5%9F%BA%E7%A1%80/2.1%20%E5%9F%BA%E7%A1%80%E7%AF%87/3.%20%E5%8F%8D%E5%B0%84%E7%AF%87)
@@ -41,12 +41,9 @@
 * [设计模式文章](https://github.com/fantj2016/java-reader/tree/master/2.%20Java%E5%9F%BA%E7%A1%80/2.1%20%E5%9F%BA%E7%A1%80%E7%AF%87/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F)
 * [Tomcat类加载器(待完成)]()
 
-#### 2.2 源码篇
+#### 2.2 源码
 
 * [Java源码、集合源码](https://github.com/fantj2016/java-reader/tree/master/2.%20Java%E5%9F%BA%E7%A1%80/2.2%20%E6%BA%90%E7%A0%81%E7%AF%87)
-
-#### 2.3 面试篇
-* [Java基础面试题总结](https://github.com/fantj2016/java-reader/tree/master/2.%20Java%E5%9F%BA%E7%A1%80/2.3%20%E9%9D%A2%E8%AF%95%E7%AF%87)
 
 --- 
 
@@ -72,14 +69,8 @@
 * [Dubbo源码](https://github.com/fantj2016/java-reader/tree/master/3.%20%E6%A1%86%E6%9E%B6%E4%B8%93%E9%A2%98/3.2%20%E6%BA%90%E7%A0%81%E7%AF%87/Dubbo%E6%BA%90%E7%A0%81)
 
 
-#### 3.3 面试题
-* [Spring面试题(待完成)]()
-* [SpringMvc面试题(待完成)]()
-* [Mybatis面试题(待完成)]()
-* [Redis面试](https://github.com/fantj2016/java-reader/blob/master/Redis%E9%9D%A2%E8%AF%95/redis.md)
 
-
-#### 3.4 框架实现篇
+#### 3.3 框架实现
 * [Tomcat框架简单实现](https://github.com/fantj2016/MyTomcat)
 * [Jedis框架简单实现](https://github.com/fantj2016/easy-jedis)
 * [MVC框架简单实现](https://github.com/fantj2016/easy-springmvc)
@@ -88,8 +79,6 @@
 ### 4. 分布式专题
 * [分布式事务](https://github.com/fantj2016/java-reader/tree/master/4.%20%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%93%E9%A2%98/4.1%20%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1)
 * 分布式锁..待更新
-
-##### 4.1 分布式面试题
 
 ---
 ### 5. 中间件专题
