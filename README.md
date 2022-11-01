@@ -8,6 +8,8 @@
 >【Java入门 -> 进大厂笔记📖📒】未来的你一定会感谢今天学习的自己! 本项目主打Java基础、算法、框架实战、源码、中间件、大数据、面试等知识积累和经验总结。文章共300多篇, 大部分为原创, 部分翻译和转载已标明出处。 谢谢大家的支持, 转载请标明出处, 谢谢。
 
 
+[![Star History Chart](https://api.star-history.com/svg?repos=fantj2016/java-reader&type=Date)](https://star-history.com/#fantj2016/java-reader)
+
 感兴趣的朋友可以加入我们, 一起完善, 投稿请加微信。
 
 推荐书籍: 《深入理解Java虚拟机》、《并发编程的艺术》、《Java多线程核心编程艺术》、《Java8函数式编程》、《Redis设计与实现》、《RocketMQ技术内幕》、《Spring技术内幕》、《Spring源码深度解析》、《剑指Offer》、《大话设计模式》... 详细书单请在公众号获取。
@@ -127,9 +129,6 @@
 
 ### 9. 架构设计
 * [架构设计篇](https://github.com/fantj2016/java-reader/tree/master/9.%20%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1)
-
-### HR面经验
-* [HR面技巧](https://github.com/fantj2016/java-reader/tree/master/HR%E9%9D%A2%E8%AF%95%E6%8A%80%E5%B7%A7)
 
 ### 公众号
 >github阅读不方便?添加公众号,随时随地当reader,不定时发放福利
